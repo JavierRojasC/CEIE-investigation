@@ -1,0 +1,185 @@
+---
+title: "Manova"
+author: "Maria Teresa Mendoza"
+date: "5/14/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Datos EEG
+
+```{r}
+library(MANOVA.RM)
+library(psych)
+
+data(EEGwide)
+EEGwide
+
+Y <- EEGwide[,1:6]
+
+X <- EEGwide[,c('sex','diagnosis')]
+X$sex <- as.factor(X$sex)
+X$diagnosis <- as.factor(X$diagnosis)
+
+```
+
+###### EXPLORACION #########
+
+```{r}
+FC<-as.matrix(Y[,1:3])
+C<- as.matrix(Y[,4:6])
+sexo<- X$sex
+diagnostico<- X$diagnosis
+
+boxplot(Y$brainrate_temporal~sexo+diagnostico,main='Sexo & diagnostico: Frecuencia Cerebral Temporal', col=palette('Paired'))
+
+boxplot(FC~sexo+diagnostico,main='Sexo & diagnostico: Frecuencia Cerebral', col=palette('Pastel 2'))
+
+
+boxplot(C~sexo+diagnostico,main='Sexo & diagnostico: Complejidad', col=palette('Tableau 10'))
+
+describeBy(FC,group = sexo)
+describeBy(FC,group = diagnostico)
+describeBy(C,group = sexo)
+describeBy(C,group = diagnostico)
+```
+
+## LINEADLIDAD ##
+
+```{r}
+#Pares de Variables
+plot(Y$brainrate_frontal,sexo,pch=20,col='blue',cex=2)
+plot(Y$brainrate_frontal,diagnostico,pch=20,col='blue',cex=2)
+
+plot(Y$complexity_temporal,sexo,pch=20,col='blue',cex=2)
+plot(Y$complexity_temporal,diagnostico,pch=20,col='blue',cex=2)
+
+
+cor(FC)
+cor(C)
+```
+
+
+## outliers multivariante
+
+```{r}
+
+#Distancia de mahalanobis
+
+D2<-mahalanobis(Y,center = colMeans(Y),cov = var(Y))
+
+#distancia que hay del punto al centroide multivariado
+
+sort(D2,decreasing = T)
+
+alpha=0.001
+# Sigue una distribucion Chi-cuadrada
+cutoff<-qchisq(p=1-alpha,df=ncol(Y))
+cutoff
+which(D2>cutoff)
+```
+
+## MANOVA Clásico
+
+```{r}
+
+MANOVA1 <- manova(as.matrix(Y) ~ diagnostico *  sexo, data=EEGwide)
+
+#Se recomienda Pillai cuando se viola el supuesto de igual de matrices de varianza
+
+summary(MANOVA1,test ="Pillai")
+summary(MANOVA1,test = 'Wilks')
+
+summary.aov(MANOVA1)
+```
+
+## SUPUESTOS
+
+```{r}
+#validar el supuesto de igual de matrices de varianzas y covarianzas
+
+library(MASS)
+library(heplots)
+boxM(as.matrix(Y)~diagnostico *  sexo, data=EEGwide)
+
+#Se viola el supuesto de Igualdad, se recomienda usar Pillai's
+
+#Normalidad Multivariante
+
+library(mvnormtest)
+Yt=t(Y)
+mshapiro.test(Yt)
+
+resi<-residuals(MANOVA1)
+qqPlot(resi)
+
+#OTROS TEST
+library(MVN)
+
+mvn(Y,desc = T,mvnTest = 'hz', multivariatePlot = 'qq')
+
+mvn(Y,desc = T,mvnTest = 'mardia', multivariatePlot = 'qq')
+
+qqPlot(Y$brainrate_temporal,pch=20,col='red',cex=1.4)
+
+#Calcular Efectos
+
+etasq(MANOVA1,test='Wilks',partial=r)
+etasq(MANOVA1,test='Pillai',partial=r)
+etasq(MANOVA1,test='Hotelling',partial=r)
+```
+
+
+## PERMANOVA
+
+```{r}
+library(vegan)
+set.seed(36)
+DistanciasY<-dist(Y)
+Permanova1 <-adonis2(DistanciasY ~ diagnostico *  sexo, data=EEGwide, permutations = 999)
+Permanova1
+```
+
+## Supuestos
+
+```{r}
+#homogeneidad de varianzas
+dispersionS<- betadisper(DistanciasY,group = sexo )
+permutest(dispersion)
+plot(dispersion,hull=FALSE,ellipse=TRUE)
+dispersionD<- betadisper(DistanciasY,group = diagnostico)
+permutest(dispersionD)
+plot(dispersionD,hull=FALSE,ellipse=TRUE)
+
+```
+
+## MANOVA BAYESIANO
+
+```{r}
+library(ggplot2)
+
+library(brms)
+data(EEGwide)
+fit1 <- brm(mvbind(brainrate_temporal, brainrate_frontal,brainrate_central,
+                   complexity_temporal,complexity_frontal,complexity_central) ~ sex, data = EEGwide, chains = 3)
+
+fitNulo <- brm(mvbind(brainrate_temporal, brainrate_frontal,brainrate_central,
+                   complexity_temporal,complexity_frontal,complexity_central) ~ 1,
+               save_all_pars = TRUE,
+  data = EEGwide, chains = 3)
+```
+
+```{r}
+fit1
+```
+
+
+### Bayes Factor
+
+```{r}
+BF = bayes_factor(fit1, fitNulo, log = FALSE)
+BF
+```
