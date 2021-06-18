@@ -17,7 +17,6 @@ aovbayes <- function(dataset=FALSE) {
   require(rstantools)
   require(reshape)
   require(purrr)
-  require(posterior)
   require(stringr)
 
   # dotR <- file.path(Sys.getenv("HOME"), ".R")
