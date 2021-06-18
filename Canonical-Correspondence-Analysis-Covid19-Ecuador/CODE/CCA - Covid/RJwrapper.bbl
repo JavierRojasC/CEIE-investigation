@@ -1,15 +1,98 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Zhang et~al.(2020)Zhang, Ma, and Wang]{ZHANG2020109829}
+\bibitem[Cevallos-Valdiviezo et~al.(2021)Cevallos-Valdiviezo,
+  Vergara-Montesdeoca, and Zambrano-Zambrano]{CEVALLOSVALDIVIEZO2021297}
+H.~Cevallos-Valdiviezo, A.~Vergara-Montesdeoca, and G.~Zambrano-Zambrano.
+\newblock Measuring the impact of the covid-19 outbreak in ecuador using
+  preliminary estimates of excess mortality, march 17october 22, 2020.
+\newblock \emph{International Journal of Infectious Diseases}, 104:\penalty0
+  297--299, 2021.
+\newblock ISSN 1201-9712.
+\newblock \doi{https://doi.org/10.1016/j.ijid.2020.12.045}.
+\newblock URL
+  \url{https://www.sciencedirect.com/science/article/pii/S1201971220325674}.
+
+\bibitem[Chen et~al.(2020)Chen, Feng, Chen, Hsieh, Kuo, Chang, Yang, and
+  Chen]{Chen2020}
+F.-M. Chen, M.-C. Feng, T.-C. Chen, M.-H. Hsieh, S.~Kuo, H.-L. Chang, C.-J.
+  Yang, and Y.-H. Chen.
+\newblock Big data integration and analytics to prevent a potential hospital
+  outbreak of covid-19 in taiwan.
+\newblock \emph{Journal of Microbiology, Immunology and Infection}, 54, 04
+  2020.
+\newblock \doi{10.1016/j.jmii.2020.04.010}.
+
+\bibitem[de~Fatima et~al.(2020)de~Fatima, Boger, Vilhena, Fachi, Marlei,
+  Fernandes, and Santos]{Fatima2020}
+A.~de~Fatima, B.~Boger, R.~Vilhena, M.~Fachi, J.~Marlei, M.~Fernandes, and
+  Santos.
+\newblock A multivariate analysis of risk factors associated with death by
+  covid-19 in the usa, italy, spain, and germany (2).
+\newblock \emph{Journal of public health}, 1, 10 2020.
+\newblock \doi{10.1007/s10389-020-01397-7}.
+
+\bibitem[Devkota(2021)]{Devkota2021}
+J.~Devkota.
+\newblock Multivariate analysis of covid-19 for countries with limited and
+  scarce data: Examples from nepal.
+\newblock \emph{Journal of Environmental and Public Health}, 2021, 01 2021.
+\newblock \doi{10.1155/2021/8813505}.
+
+\bibitem[Li et~al.(2020)Li, Dong, Wang, Guo, Zhou, Zhang, Tian, Du, Zhu, Wang,
+  Zhao, Fan, Luo, and Hu]{Li2020}
+M.~Li, Y.~Dong, H.~Wang, W.~Guo, H.~Zhou, Z.~Zhang, C.~Tian, K.~Du, R.~Zhu,
+  L.~Wang, L.~Zhao, H.~Fan, S.~Luo, and D.~Hu.
+\newblock Cardiovascular disease potentially contributes to the progression and
+  poor prognosis of covid-19.
+\newblock \emph{Nutrition, Metabolism and Cardiovascular Diseases}, 30, 04
+  2020.
+\newblock \doi{10.1016/j.numecd.2020.04.013}.
+
+\bibitem[Pal and Bhadada(2020)]{Pal2020}
+R.~Pal and S.~Bhadada.
+\newblock Covid-19 and diabetes mellitus: An unholy interaction of two
+  pandemics.
+\newblock \emph{Diabetes and Metabolic Syndrome Clinical Research and Reviews},
+  05 2020.
+\newblock \doi{10.1016/j.dsx.2020.04.049}.
+
+\bibitem[Santillan~Haro(2020)]{Haro2020}
+A.~Santillan~Haro.
+\newblock Caracterización epidemiológica de covid-19 en ecuador.
+\newblock \emph{InterAmerican Journal of Medicine and Health}, 3:\penalty0 1 --
+  7, Apr. 2020.
+\newblock \doi{10.31005/iajmh.v3i0.99}.
+\newblock URL \url{https://www.iajmh.com/iajmh/article/view/99}.
+
+\bibitem[Sharma et~al.(2020)Sharma, Yadav, Mangla, Mohanty, and
+  Mohanty]{Sharma2020}
+N.~Sharma, S.~Yadav, M.~Mangla, A.~Mohanty, and S.~Mohanty.
+\newblock Multivariate analysis of covid-19 on stock, commodity and purchase
+  manager indices: A global perspective.
+\newblock 09 2020.
+\newblock \doi{10.21203/rs.3.rs-68388/v1}.
+
+\bibitem[Zhang et~al.(2020{\natexlab{a}})Zhang, Wang, Jia, Li, Hu, Chen, Wei,
+  Gong, Zhou, Yu, Yu, Lei, Cheng, Zhang, Xu, Wang, and Dong]{Zhang2020}
+J.~Zhang, X.~Wang, X.~Jia, J.~Li, K.~Hu, G.~Chen, J.~Wei, Z.~Gong, C.~Zhou,
+  H.~Yu, M.~Yu, H.~Lei, F.~Cheng, B.~Zhang, Y.~Xu, G.~Wang, and W.~Dong.
+\newblock Risk factors for disease severity, unimprovement, and mortality of
+  covid-19 patients in wuhan, china.
+\newblock \emph{Clinical Microbiology and Infection}, 26, 04
+  2020{\natexlab{a}}.
+\newblock \doi{10.1016/j.cmi.2020.04.012}.
+
+\bibitem[Zhang et~al.(2020{\natexlab{b}})Zhang, Ma, and Wang]{ZHANG2020109829}
 X.~Zhang, R.~Ma, and L.~Wang.
 \newblock Predicting turning point, duration and attack rate of covid-19
   outbreaks in major western countries.
-\newblock \emph{Chaos, Solitons & Fractals}, 135:\penalty0 109829, 2020.
+\newblock \emph{Chaos, Solitons Fractals}, 135:\penalty0 109829,
+  2020{\natexlab{b}}.
 \newblock ISSN 0960-0779.
 \newblock \doi{https://doi.org/10.1016/j.chaos.2020.109829}.
 \newblock URL
