@@ -159,11 +159,11 @@ aovbayes <- function(dataset=FALSE) {
                        ),
                        tabItem(tabName = "Supuestos",
                                sliderInput(inputId = 'alpha',
-                                           label='Ingrese alpha (Error tipo 1)',
+                                           label='Enter Alpha (Error type 1)',
                                            value=0.05,
                                            min=0,
                                            max=1),
-                               box(title = 'Normalidad de los residuos',collapsible = TRUE,
+                               box(title = 'Normality of the residuals',collapsible = TRUE,
                                    width = 12,
                                    column(6,
                                           withSpinner(highchartOutput('normalidad',  height = "350px"), type = 7, color='#C7D5EB')
@@ -173,49 +173,49 @@ aovbayes <- function(dataset=FALSE) {
                                           tableOutput('normalidadKolmog'),
                                           h3(textOutput('normalidadConclu')),
                                           h2(htmlOutput('CumpleNorm')))),
-                               box(title = 'Homocedasticidad de los residuos',collapsible = TRUE,
+                               box(title = 'Homoscedasticity of the residuals',collapsible = TRUE,
                                    width = 12,
                                    column(6,
                                           withSpinner(highchartOutput('homocedasticidad',  height = "350px"), type = 7, color='#C7D5EB')
                                    ),
                                    column(6,
-                                          h2('Homocedasticidad por prueba de Bartlett'),
+                                          h2('Homoscedasticity by Bartlett´s test'),
                                           tableOutput('homocedasticidadBart'),
                                           h3(textOutput('homocedasticidadConclu')),
                                           h2(htmlOutput('CumpleHomoc')))),
-                               box(title = 'Independencia de los residuos',collapsible = TRUE,
+                               box(title = 'Independence of residuals',collapsible = TRUE,
                                    width = 12,
 
                                    column(12,
-                                          h2('Independencia por prueba de Durbin Watson'),
+                                          h2('Independence by Durbin Watson Test'),
                                           tableOutput('independenciaDurbin'),
                                           h3(textOutput('independenciaConclu')),
                                           h2(htmlOutput('CumpleIndependencia')))),
-                               box(title = 'Simetría de los residuos',
+                               box(title = 'Symmetry of the residuals',
                                    width = 12,collapsible = TRUE,
                                    column(6,
                                           withSpinner(highchartOutput('simetria',  height = "350px"), type = 7, color='#C7D5EB')
                                    ),
                                    column(6,
-                                          h2('Simetría - Coeficiente de asimetría'),
+                                          h2('Symmetry - Asymmetry coefficient'),
                                           tableOutput('simetriaCoef'),
                                           h3(textOutput('simetriaConclu')),
                                           h2(htmlOutput('CumpleSimet')))),
                                box(width = 12,collapsible = TRUE,
                                    withSpinner(highchartOutput('diagramaSupuestos',  height = "650px"), type = 7, color='#C7D5EB'),
-                                   h2('Técnica disponible'),
+                                   h2('Technique available'),
                                    withSpinner(highchartOutput('eleccionTecnica'), type = 7, color='#C7D5EB'))),
 
                        tabItem(tabName = "ANOVAcl",
                                sliderInput(inputId = 'alpha2',
-                                           label='Ingrese alpha (Error tipo 1)',
+                                           label='Enter Alpha (Error type 1)',
                                            value=0.05,
                                            min=0,
                                            max=1),
 
-                               box(title = "Tabla ANOVA Clásico",collapsible = TRUE,
+                               box(title = "Classic ANOVA Table",collapsible = TRUE,
                                    tableOutput('Aov'),
-                                   h2("Conclusión"),
+                                   h2("Conclution"),
                                    h3(textOutput('conclusionAov'))),
                                column(12,withSpinner(highchartOutput('Box',  height = "450px"), type = 7, color='#C7D5EB')),
                                box(title = "Post-Hoc",collapsible = TRUE,
@@ -228,14 +228,14 @@ aovbayes <- function(dataset=FALSE) {
                        ),
                        tabItem(tabName = "KW",
                                sliderInput(inputId = 'alphakw',
-                                           label='Ingrese alpha (Error tipo 1)',
+                                           label='Enter Alpha (Error type 1)',
                                            value=0.05,
                                            min=0,
                                            max=1),
 
-                               box(title = "Tabla Kruskal Wallis",collapsible = TRUE,
+                               box(title = "Kruskal Wallis Table",collapsible = TRUE,
                                    tableOutput('kw'),
-                                   h2("Conclusión"),
+                                   h2("Conclution"),
                                    h3(textOutput('conclusionKW'))),
 
                                box(title = 'Post Hoc: Pairwise comparisons using Wilcoxon rank sum exact test ',collapsible = TRUE,
@@ -249,23 +249,23 @@ aovbayes <- function(dataset=FALSE) {
                        ),
                        tabItem(tabName = "ANOVAby",
 
-                               box(title = "Tabla ANOVA Bayesiano",collapsible = TRUE,
+                               box(title = "Bayesian ANOVA Table",collapsible = TRUE,
                                    tableOutput('AovBY'),
-                                   h2("Conclusión"),
+                                   h2("Conclution"),
                                    h3(textOutput('conclusionaovby'))),
-                               box(title = 'Centro de control',collapsible = TRUE,
+                               box(title = 'Control center',collapsible = TRUE,
                                    sliderInput(inputId = 'prior',
-                                               label='Ingrese probabilidad a priori',
+                                               label='Enter prior probability',
                                                value=0.5,
                                                min=0,
                                                max=1),
                                    numericInput(inputId = 'numberiterations',
-                                                label='Ingrese el número de iteraciones',
+                                                label='Enter the number of iterations',
                                                 value=1000,
                                                 min=500,
                                                 max=3000),
                                    sliderInput(inputId = 'chainsnumber',
-                                               label='Ingrese número de cadenas:',
+                                               label='Enter number of chains:',
                                                value=1,
                                                min=1,
                                                max=4)),
@@ -275,8 +275,8 @@ aovbayes <- function(dataset=FALSE) {
                                    width = 12,
                                    column(6,
                                           selectInput("mcmcCHAIN","Seleccione MCMC",
-                                                      c("Media y Varianza",
-                                                        "Tratamientos")),
+                                                      c("Mean and Variance",
+                                                        "Treatments")),
                                           withSpinner(highchartOutput('AovBYposmcmc',  height = "450px"), type = 7, color='#C7D5EB')),
                                    column(6,withSpinner(highchartOutput('AovBYposcurves',  height = "450px"), type = 7, color='#C7D5EB'))
 
@@ -1073,7 +1073,7 @@ aovbayes <- function(dataset=FALSE) {
         post <- (posterior(Anovabyy,iterations = input$numberiterations))
         MCMC <- data.frame(Iteración=1:input$numberiterations,post[,])
 
-        if (input$mcmcCHAIN=="Media y Varianza"){
+        if (input$mcmcCHAIN=="Mean and Variance"){
 
           highchart()%>%
             hc_yAxis_multiples( list(top = "0%", height = "50%", title = list(text = "Media"),opposite=FALSE),
@@ -1385,14 +1385,11 @@ aovbayes <- function(dataset=FALSE) {
           hc_chart(type = 'organization', inverted=TRUE) %>%
           hc_add_series(name='Diagrama de técnicas según cumplimiento de supuestos',
                         data = list(
-
                           list(from = 'Kruskal Wallis', to = 'Kruskal Wallis'),
                           list(from = 'ANOVA Clásico', to = 'ANOVA Clásico'),
                           list(from = 'ANOVA Bayesiano', to = 'ANOVA Bayesiano')
-
                         ),
                         nodes=  list(
-
                           list(id = 'ANOVA Clásico', color=col_anova),
                           list(id = 'Kruskal Wallis', color=col_kw),
                           list(id = 'ANOVA Bayesiano', color='#77DA85')
