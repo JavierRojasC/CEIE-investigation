@@ -1,0 +1,6 @@
+PLW - point light walker
+representar a la persona como puntos en cada una de sus articulaciones (codos,rodillas,pantorillas,muñecas y cuello)
+remover el fondo y cualquier otro objeto (en movimiento o no) que se encuentre
+representar el foreground(persona) como PLW
+hacer predicciones en los ejes x,y,z mediante regresion lineal para el posicionamiento de cada articulación para obtener posibles "gestos"
+comparar los gestos obtenidos con el conjunto de datos de video previamente transformad a PLW para encontrar semejanzas.
