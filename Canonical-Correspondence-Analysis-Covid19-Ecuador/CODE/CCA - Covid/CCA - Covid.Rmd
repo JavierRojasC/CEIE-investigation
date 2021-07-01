@@ -1,5 +1,5 @@
 ---
-title: Análisis multivariante empleado correspondencias canónicas  - COVID19 - Ecuador
+title: Análisis multivariante empleando correspondencias canónicas  - COVID19 - Ecuador
 author:
   # see ?rjournal_article for more information
   - name: William F. Tandazo-Vargas
@@ -85,6 +85,8 @@ El análisis de Correspondencia (ACM) visto en el punto anterior es el caso más
 ### Análisis de Correspondencia Canónica. 
 
 Como hemos visto, el análisis de correspondencia nos ayuda a visualizar los datos de una matriz dentro de un espacio de dimensión reducida, donde la inercia de esta nube de puntos será la más optima. Un análisis de correspondencia canónico (ACC) se puede emplear cuando encontramos estas dimensiones a partir del AC, pero con la condición de que estas son una combinación lineal de variables explicativas adicionales. Podemos ver esto como un problema de regresión lineal múltiple, solo que en vez de hacer regresión sobre las variables explicativas lo haremos a las dimensiones de estas variables explicativas. El ACC restringe el espacio donde este buscara los ejes principales óptimos de un espacio total, el complemento de este será un espacio no restringido el cual podría también tener la solución óptima. El porcentaje total de inercia estará repartido entre estos dos espacios, siendo el restringido el lugar donde se encontraría la inercia máxima. En consecuencia, a lo anterior el ACC explicara un poco menos del total de inercia existente. Para interpretar el modelo de manera gráfica se sigue la de un AC clásico y se sigue la misma explicación que la del “Biplot”. 
+
+
 
 ## Datos
 
