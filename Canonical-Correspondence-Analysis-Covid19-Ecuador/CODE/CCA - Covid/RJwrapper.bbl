@@ -1,4 +1,4 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{12}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -53,6 +53,16 @@ M.~Li, Y.~Dong, H.~Wang, W.~Guo, H.~Zhou, Z.~Zhang, C.~Tian, K.~Du, R.~Zhu,
   2020.
 \newblock \doi{10.1016/j.numecd.2020.04.013}.
 
+\bibitem[Lorenzo et~al.(2021)Lorenzo, Tam, and Seow]{LORENZO2021111024}
+J.~S.~L. Lorenzo, W.~W.~S. Tam, and W.~J. Seow.
+\newblock Association between air quality, meteorological factors and covid-19
+  infection case numbers.
+\newblock \emph{Environmental Research}, 197:\penalty0 111024, 2021.
+\newblock ISSN 0013-9351.
+\newblock \doi{https://doi.org/10.1016/j.envres.2021.111024}.
+\newblock URL
+  \url{https://www.sciencedirect.com/science/article/pii/S0013935121003182}.
+
 \bibitem[Pal and Bhadada(2020)]{Pal2020}
 R.~Pal and S.~Bhadada.
 \newblock Covid-19 and diabetes mellitus: An unholy interaction of two
@@ -76,6 +86,13 @@ N.~Sharma, S.~Yadav, M.~Mangla, A.~Mohanty, and S.~Mohanty.
   manager indices: A global perspective.
 \newblock 09 2020.
 \newblock \doi{10.21203/rs.3.rs-68388/v1}.
+
+\bibitem[Zambrano-Monserrate and Ruano(2020)]{Zambrano2020}
+M.~Zambrano-Monserrate and M.~Ruano.
+\newblock Has air quality improved in ecuador during the covid-19 pandemic? a
+  parametric analysis.
+\newblock \emph{Air Quality, Atmosphere and Health}, 13, 08 2020.
+\newblock \doi{10.1007/s11869-020-00866-y}.
 
 \bibitem[Zhang et~al.(2020{\natexlab{a}})Zhang, Wang, Jia, Li, Hu, Chen, Wei,
   Gong, Zhou, Yu, Yu, Lei, Cheng, Zhang, Xu, Wang, and Dong]{Zhang2020}
