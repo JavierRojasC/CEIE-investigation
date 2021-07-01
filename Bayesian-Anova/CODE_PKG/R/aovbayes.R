@@ -19,26 +19,6 @@ aovbayes <- function(dataset=FALSE) {
   require(purrr)
   require(stringr)
 
-  # dotR <- file.path(Sys.getenv("HOME"), ".R")
-  # if (!file.exists(dotR)) dir.create(dotR)
-  # MAKEVARS <- file.path(dotR, "Makevars")
-  # if (!file.exists(MAKEVARS)) file.create(MAKEVARS)
-  #
-  # cat(
-  #   "\nCXXFLAGS=-Os -mtune=native -march=native",
-  #   "CXXFLAGS += -Wno-unused-variable -Wno-unused-function  -Wno-unknown-pragmas",
-  #   "CXX=clang++",
-  #   file = MAKEVARS,
-  #   sep = "\n",
-  #   append = TRUE
-
-  # )
-  # Sys.setenv(R_MAKEVARS_USER = "/read-only/path/to/Makevars")
-
-
-  #rt <- stanc(file='https://raw.githubusercontent.com/JavierRojasC/JavierRCam/master/oneway.stan')
-  #sm <- stan_model(stanc_ret = rt, verbose=FALSE)
-
   left_footer <- fluidRow(
     column(
       width = 6,
@@ -54,7 +34,7 @@ aovbayes <- function(dataset=FALSE) {
 
   app <- list(
     ui = dashboardPage(
-      preloader = list(html = tagList(spin_three_bounce(), h3("Espere un momento ...")), color = "#1E3A4E"),
+      preloader = list(html = tagList(spin_three_bounce(), h3("Please wait a moment ...")), color = "#1E3A4E"),
 
       title =  'One-way analysis of variance' ,
       dashboardHeader(title = "One-way analysis of variance",
@@ -62,7 +42,7 @@ aovbayes <- function(dataset=FALSE) {
       dashboardSidebar(
         sidebarMenu(
           menuItem("Database", tabName = "BD", startExpanded = TRUE,icon = icon("database")),
-          menuItem("Assumptions", tabName = "Supuestos", startExpanded = TRUE,icon = icon("tasks")),
+          menuItem("Assumptions", tabName = "Assumptions", startExpanded = TRUE,icon = icon("tasks")),
           menuItem("Classic ANOVA", tabName = "ANOVAcl", startExpanded = TRUE,icon = icon("adn")),
           menuItem("Kruskal Wallis", tabName = "KW", startExpanded = TRUE,icon = icon("kickstarter-k")),
           menuItem("Bayesian ANOVA", tabName = "ANOVAby", startExpanded = TRUE,icon = icon("bold"))
@@ -138,8 +118,9 @@ aovbayes <- function(dataset=FALSE) {
 
                      tabItems(
                        tabItem(tabName= "BD",
-                               box(width=12,fluidRow(
-                                 column(12,fileInput("file1", "Upload base in csv",
+                               box(width=12,title="Upload base in csv",
+                                   fluidRow(
+                                 column(12,fileInput("file1", " ",
                                                     accept = c(
                                                       "text/csv",
                                                       "comma-separated-values,text/plain",
@@ -156,58 +137,59 @@ aovbayes <- function(dataset=FALSE) {
                                             DT::dataTableOutput("DTable")))
 
                        ),
-                       tabItem(tabName = "Supuestos",
+                       tabItem(tabName = "Assumptions",
                                sliderInput(inputId = 'alpha',
-                                           label='Enter Alpha (Error type 1)',
+                                           label='Enter Alpha (Type 1 Error)',
                                            value=0.05,
                                            min=0,
                                            max=1),
                                box(title = 'Normality of the residuals',collapsible = TRUE,
                                    width = 12,
                                    column(6,
-                                          withSpinner(highchartOutput('normalidad',  height = "350px"), type = 7, color='#C7D5EB')
+                                          withSpinner(highchartOutput('normality',  height = "350px"), type = 7, color='#C7D5EB')
                                    ),
                                    column(6,
                                           h2(textOutput('pruebaNorm')),
-                                          tableOutput('normalidadKolmog'),
-                                          h3(textOutput('normalidadConclu')),
+                                          tableOutput('normalityTest'),
+                                          h3(textOutput('normalityConclu')),
                                           h2(htmlOutput('CumpleNorm')))),
                                box(title = 'Homoscedasticity of the residuals',collapsible = TRUE,
                                    width = 12,
                                    column(6,
-                                          withSpinner(highchartOutput('homocedasticidad',  height = "350px"), type = 7, color='#C7D5EB')
+                                          withSpinner(highchartOutput('homoscedasticity',  height = "350px"), type = 7, color='#C7D5EB')
                                    ),
                                    column(6,
                                           h2('Homoscedasticity by Bartlett´s test'),
-                                          tableOutput('homocedasticidadBart'),
-                                          h3(textOutput('homocedasticidadConclu')),
-                                          h2(htmlOutput('CumpleHomoc')))),
+                                         tableOutput('homoscedasticityBart'),
+                                          h3(textOutput('homoscedasticityConclu')),
+                                          h2(htmlOutput('CumpleHomoc'))
+                                          )),
                                box(title = 'Independence of residuals',collapsible = TRUE,
                                    width = 12,
 
                                    column(12,
                                           h2('Independence by Durbin Watson Test'),
-                                          tableOutput('independenciaDurbin'),
-                                          h3(textOutput('independenciaConclu')),
-                                          h2(htmlOutput('CumpleIndependencia')))),
+                                          tableOutput('independenceDurbin'),
+                                          h3(textOutput('independenceConclu')),
+                                          h2(htmlOutput('Cumpleindependence')))),
                                box(title = 'Symmetry of the residuals',
                                    width = 12,collapsible = TRUE,
                                    column(6,
-                                          withSpinner(highchartOutput('simetria',  height = "350px"), type = 7, color='#C7D5EB')
+                                          withSpinner(highchartOutput('symmetry',  height = "350px"), type = 7, color='#C7D5EB')
                                    ),
                                    column(6,
                                           h2('Symmetry - Asymmetry coefficient'),
-                                          tableOutput('simetriaCoef'),
-                                          h3(textOutput('simetriaConclu')),
+                                          tableOutput('symmetryCoef'),
+                                          h3(textOutput('symmetryConclu')),
                                           h2(htmlOutput('CumpleSimet')))),
                                box(width = 12,collapsible = TRUE,
-                                   withSpinner(highchartOutput('diagramaSupuestos',  height = "650px"), type = 7, color='#C7D5EB'),
+                                   withSpinner(highchartOutput('diagram',  height = "650px"), type = 7, color='#C7D5EB'),
                                    h2('Technique available'),
-                                   withSpinner(highchartOutput('eleccionTecnica'), type = 7, color='#C7D5EB'))),
+                                   withSpinner(highchartOutput('technique'), type = 7, color='#C7D5EB'))),
 
                        tabItem(tabName = "ANOVAcl",
                                sliderInput(inputId = 'alpha2',
-                                           label='Enter Alpha (Error type 1)',
+                                           label='Enter Alpha (Type 1 Error)',
                                            value=0.05,
                                            min=0,
                                            max=1),
@@ -215,7 +197,7 @@ aovbayes <- function(dataset=FALSE) {
                                box(title = "Classic ANOVA Table",collapsible = TRUE,
                                    tableOutput('Aov'),
                                    h2("Conclution"),
-                                   h3(textOutput('conclusionAov'))),
+                                   h3(textOutput('conclutionAov'))),
                                column(12,withSpinner(highchartOutput('Box',  height = "450px"), type = 7, color='#C7D5EB')),
                                box(title = "Post-Hoc",collapsible = TRUE,
                                    width=12,
@@ -227,7 +209,7 @@ aovbayes <- function(dataset=FALSE) {
                        ),
                        tabItem(tabName = "KW",
                                sliderInput(inputId = 'alphakw',
-                                           label='Enter Alpha (Error type 1)',
+                                           label='Enter Alpha (Type 1 Error)',
                                            value=0.05,
                                            min=0,
                                            max=1),
@@ -242,7 +224,7 @@ aovbayes <- function(dataset=FALSE) {
                                                c("holm", "hochberg", "hommel", "bonferroni", "BH", "BY",
                                                  "fdr", "none")),
                                    h3('p-values adjusted'),
-                                   tableOutput('KWpost')
+                                   DT::dataTableOutput('KWpost')
                                )
 
                        ),
@@ -251,7 +233,7 @@ aovbayes <- function(dataset=FALSE) {
                                box(title = "Bayesian ANOVA Table",collapsible = TRUE,
                                    tableOutput('AovBY'),
                                    h2("Conclution"),
-                                   h3(textOutput('conclusionaovby'))),
+                                   h3(textOutput('conclutionaovby'))),
                                box(title = 'Control center',collapsible = TRUE,
                                    sliderInput(inputId = 'prior',
                                                label='Enter prior probability',
@@ -329,8 +311,8 @@ aovbayes <- function(dataset=FALSE) {
 
         else list (
 
-          selectInput("y", "Variable dependiente", choices =    names(data())),
-          selectInput("x", "Variable independiente", choices = names(data()))
+          selectInput("y", "Dependent variable", choices =    names(data())),
+          selectInput("x", "Independent variable", choices = names(data()))
 
 
         )
@@ -351,10 +333,10 @@ aovbayes <- function(dataset=FALSE) {
 
         S <- data.frame(c(Ind,'Residuals'),S)
 
-        colnames(S) <- c('','Gl','SC','MC','F','Val-p')
+        colnames(S) <- c('','df','SS','MS','F','p-value')
         S
       })
-      output$conclusionAov <- renderText({
+      output$conclutionAov <- renderText({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -362,14 +344,14 @@ aovbayes <- function(dataset=FALSE) {
 
         SA <- summary(aov(as.numeric(as.matrix(Data[,Dep]))~as.factor(as.matrix(Data[,Ind]))))
         if (SA[[1]][['Pr(>F)']][1] < input$alpha2){
-          response <- paste0('Existen diferencias significativas entre los grupos de ',Ind)
+          response <- paste0('There are significant differences between the groups of',Ind)
         } else if  (SA[[1]][['Pr(>F)']][1] > input$alpha2){
-          response <- paste0('No existen diferencias significativas entre los grupos de ',Ind)}
+          response <- paste0('There are no significant differences between the groups of',Ind)}
 
         response
       })
 
-      output$normalidad <- renderHighchart({
+      output$normality <- renderHighchart({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -406,13 +388,13 @@ aovbayes <- function(dataset=FALSE) {
         highchart() %>%
           hc_add_series(lineQQ, "line", hcaes(x = 'x2', y = 'y2'), name='QQ line', color='#A9DEDE',
                         marker= list(symbol='url(graphic.png)'))%>%
-          hc_add_series(LIN, "scatter", hcaes(x='xd', y='yd'), name='Puntos', color='#2B275A') %>%
+          hc_add_series(LIN, "scatter", hcaes(x='xd', y='yd'), name='Points', color='#2B275A') %>%
           hc_yAxis(
-            title = list(text = "Residuos Estandarizados"),
+            title = list(text = "Standardized Residuals"),
             max=max(lineQQ$y2),
             min=min(lineQQ$y2))%>%
           hc_xAxis(
-            title = list(text = "Cuantiles Teóricos"))%>%
+            title = list(text = "Theoretical Quantiles"))%>%
           hc_title(text='QQ plot')
       })
 
@@ -454,12 +436,12 @@ aovbayes <- function(dataset=FALSE) {
 
         names(S)[1] <- 'Trat'
 
-        hchart(pointWidth=0,type = 'columnrange',S,name='Intervalo',
+        hchart(pointWidth=0,type = 'columnrange',S,name='Interval',
                hcaes(x=Trat,high=upr, low=lwr), color='#224361')%>%
-          hc_add_series(S, type='scatter', hcaes(x=Trat, y=diff), name='Diferencias', color='#289B9C',
-                        tooltip = list(pointFormat = "<br> Diferencia = {point.y}"))%>%
-          hc_xAxis(title=list(text=('Combinaciones de tratamientos')))%>%
-          hc_yAxis(title=list(text=('Diferencias')),
+          hc_add_series(S, type='scatter', hcaes(x=Trat, y=diff), name='Diferences', color='#289B9C',
+                        tooltip = list(pointFormat = "<br> Diference = {point.y}"))%>%
+          hc_xAxis(title=list(text=('Treatment combinations')))%>%
+          hc_yAxis(title=list(text=('Diferences')),
                    plotLines = list(list(
                      value = 0,
                      color = '#DAE0EA',
@@ -469,7 +451,7 @@ aovbayes <- function(dataset=FALSE) {
                                   style = list( color = '#DAE0EA', fontWeight = 'bold' )))))
       })
 
-      output$normalidadKolmog <- renderTable({
+      output$normalityTest <- renderTable({
         Data <- data()
 
         Data <- na.omit(Data)
@@ -483,7 +465,7 @@ aovbayes <- function(dataset=FALSE) {
           Test <- lillie.test(SA$residuals)
           Tabla <- data.frame(Estadístico=signif(Test$statistic,4),
                               ValP=signif(Test$p.value,4))
-          colnames(Tabla) <- c('Estadístico KS','Valor-P')
+          colnames(Tabla) <- c('KS Statistic','p-value')
           Tabla
         } else {
           Test <- shapiro.test(SA$residuals)
@@ -495,7 +477,7 @@ aovbayes <- function(dataset=FALSE) {
       })
 
 
-      output$normalidadConclu <- renderText({
+      output$normalityConclu <- renderText({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -505,17 +487,17 @@ aovbayes <- function(dataset=FALSE) {
         if (length(SA$residuals)>30){
           Test <- lillie.test(SA$residuals)
           if (Test$p.value >= input$alpha){
-            response=paste0('Según el test de Kolmogorov-Smirnov, los residuos son normales')
+            response=paste0('According to the Kolmogorov-Smirnov test, the residuals are normal')
           } else {
-            response=paste0('Según el test de Kolmogorov-Smirnov, los residuos no son normales')
+            response=paste0('According to the Kolmogorov-Smirnov test, the residuals are not normal')
           }
           response
         } else {
           Test <- shapiro.test(SA$residuals)
           if (Test$p.value >= input$alpha){
-            response=paste0('Según el test de Shapiro-Wilk, los residuos son normales')
+            response=paste0('According to the Shapiro-Wilk test, the residuals are normal')
           } else {
-            response=paste0('Según el test de Shapiro-Wilk, los residuos no son normales')
+            response=paste0('According to the Shapiro-Wilk test, the residuals are not normal')
           }
           response
         }
@@ -530,12 +512,12 @@ aovbayes <- function(dataset=FALSE) {
         SA <- (aov(as.numeric(as.matrix(Data[,Dep]))~as.factor(as.matrix(Data[,Ind]))))
         if (length(SA$residuals)>30){
 
-          response=paste0('Normalidad por prueba de Kolmogórov-Smirnov')
+          response=paste0('Normality by Kolmogórov-Smirnov test')
 
           response
         } else {
 
-          response=paste0('Normalidad por prueba de Shapiro-Wilk')
+          response=paste0('Normality by Shapiro-Wilk test')
 
           response
         }
@@ -553,19 +535,19 @@ aovbayes <- function(dataset=FALSE) {
           Test <- lillie.test(SA$residuals)
 
           if(Test$p.value >=  input$alpha ){
-            return(paste("Supuesto de Normalidad: ","<span style=\"color:green;\"> Sí cumple.</span>"))
+            return(paste("Assumption of Normality: ","<span style=\"color:green;\"> Is met. </span>"))
 
           }else{
-            return(paste("Supuesto de Normalidad: ","<span style=\"color:red;\"> No cumple.</span>"))
+            return(paste("Assumption of Normality: ","<span style=\"color:red;\"> Is not met.</span>"))
           }} else {
 
             Test <- shapiro.test(SA$residuals)
 
             if(Test$p.value >=  input$alpha ){
-              return(paste("Supuesto de Normalidad: ","<span style=\"color:green;\"> Sí cumple.</span>"))
+              return(paste("Assumption of Normality: ","<span style=\"color:green;\"> Is met.</span>"))
 
             }else{
-              return(paste("Supuesto de Normalidad: ","<span style=\"color:red;\"> No cumple.</span>"))
+              return(paste("Assumption of Normality: ","<span style=\"color:red;\"> Is not met.</span>"))
             }
           }
       })
@@ -574,7 +556,7 @@ aovbayes <- function(dataset=FALSE) {
 
       #_________________________________________________________________
 
-      output$homocedasticidad <- renderHighchart({
+      output$homoscedasticity <- renderHighchart({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -593,7 +575,7 @@ aovbayes <- function(dataset=FALSE) {
         highchart() %>%
 
           hc_yAxis(
-            title = list(text = "Residuos"),
+            title = list(text = "Residuals"),
             plotLines = list(list(
               value = 0,
               color = '#A9DEDE',
@@ -603,15 +585,15 @@ aovbayes <- function(dataset=FALSE) {
                            style = list( color = '#1D4B5E', fontWeight = 'bold' )))),
             max=max(lineAR$y2),
             min=min(lineAR$y2))%>%
-          hc_add_series(lineAR, "scatter", hcaes(x = 'x2', y = 'y2'), name='Residuos vs Ajustados', color='#2B275A'
+          hc_add_series(lineAR, "scatter", hcaes(x = 'x2', y = 'y2'), name='Residual vs Adjusted', color='#2B275A'
           )%>%
           hc_xAxis(
-            title = list(text = "Valores Ajustados"))%>%
-          hc_title(text='Residuos vs Ajustados')
+            title = list(text = "Adjusted values"))%>%
+          hc_title(text='Residual vs Adjusted')
       })
 
 
-      output$homocedasticidadBart <- renderTable({
+      output$homoscedasticityBart <- renderTable({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -624,14 +606,14 @@ aovbayes <- function(dataset=FALSE) {
         colnames(dataBY) <- c('Ind2','Dep2')
 
         Bart <- bartlett.test(Dep2 ~ Ind2, data=dataBY)
-        Tabla <- data.frame(Estadístico=signif(Bart$statistic,4),
+        Tabla <- data.frame(Statistic=signif(Bart$statistic,4),
                             ValP=signif(Bart$p.value,4))
-        colnames(Tabla) <- c('Estadístico K cuadrado de Bartlett','Valor-P')
+        colnames(Tabla) <- c('Bartlett´s K-square statistic','p-value')
         Tabla
       })
 
 
-      output$homocedasticidadConclu <- renderText({
+      output$homoscedasticityConclu <- renderText({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -647,9 +629,9 @@ aovbayes <- function(dataset=FALSE) {
         Bart <- bartlett.test(Dep2 ~ Ind2, data=dataBY)
 
         if (Bart$p.value >= input$alpha){
-          response=paste0('Según el test de Bartlett, las muestras presentan varianzas iguales')
+          response=paste0('According to the Bartlett test, the samples show equal variances')
         } else {
-          response=paste0('Según el test de Bartlett, las muestras presentan varianzas desiguales')
+          response=paste0('According to the Bartlett test, the samples show unequal variances')
         }
         response
       })
@@ -670,10 +652,10 @@ aovbayes <- function(dataset=FALSE) {
 
         Bart <- bartlett.test(Dep2 ~ Ind2, data=dataBY)
         if(Bart$p.value >=  input$alpha ){
-          return(paste("Supuesto de Homocedasticidad: ","<span style=\"color:green;\"> Sí cumple.</span>"))
+          return(paste("Homoscedasticity assumption: ","<span style=\"color:green;\"> Is met.</span>"))
 
         }else{
-          return(paste("Supuesto de Homocedasticidad: ","<span style=\"color:red;\"> No cumple.</span>"))
+          return(paste("Homoscedasticity assumption: ","<span style=\"color:red;\"> Is not met.</span>"))
         }
       })
       #________________________________________________________________
@@ -681,7 +663,7 @@ aovbayes <- function(dataset=FALSE) {
 
 
 
-      output$independenciaDurbin <- renderTable({
+      output$independenceDurbin <- renderTable({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -699,13 +681,13 @@ aovbayes <- function(dataset=FALSE) {
         Tabla <- data.frame(Autocor=DW[1],
                             Dw=signif(as.numeric(DW[2]),4),
                             ValP=signif(as.numeric(DW[3]),4))
-        colnames(Tabla) <- c('Autocorrelación','D-W Statistic',
+        colnames(Tabla) <- c('Autocorrelation','D-W Statistic',
                              'p-value')
         Tabla
       })
 
 
-      output$independenciaConclu <- renderText({
+      output$independenceConclu <- renderText({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -722,15 +704,15 @@ aovbayes <- function(dataset=FALSE) {
         DW <- durbinWatsonTest(Aov)
 
         if (DW[3] >= input$alpha){
-          response=paste0('Según el test de Durbin Watson, no existe presencia de autocorrelación en los residuos.')
+          response=paste0('According to the Durbin Watson test, there is no presence of autocorrelation in the residuals.')
         } else {
-          response=paste0('Según el test de Durbin Watson, existe presencia de autocorrelación en los residuos.')
+          response=paste0('According to the Durbin Watson test, there is the presence of autocorrelation in the residuals.')
         }
         response
       })
 
 
-      output$CumpleIndependencia <- renderText({
+      output$Cumpleindependence <- renderText({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -747,16 +729,16 @@ aovbayes <- function(dataset=FALSE) {
         DW <- durbinWatsonTest(Aov)
 
         if (DW[3] >= input$alpha){
-          return(paste("Supuesto de Independencia: ","<span style=\"color:green;\"> Sí cumple.</span>"))
+          return(paste("Independence assumption: ","<span style=\"color:green;\"> Is met.</span>"))
 
         }else{
-          return(paste("Supuesto de Independencia: ","<span style=\"color:red;\"> No cumple.</span>"))
+          return(paste("Independence assumption: ","<span style=\"color:red;\"> Is not met.</span>"))
         }
       })
 
       #_________________________________________________________
 
-      output$simetria <- renderHighchart({
+      output$symmetry <- renderHighchart({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -774,11 +756,11 @@ aovbayes <- function(dataset=FALSE) {
 
         histRes <- hist(SA$residuals, plot=FALSE)
         hchart(histRes, name='', color='#84DED4')%>%
-          hc_title(text='Histograma de los residuos')
+          hc_title(text='Histogram of the residuals')
       })
 
 
-      output$simetriaCoef <- renderTable({
+      output$symmetryCoef <- renderTable({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -793,12 +775,12 @@ aovbayes <- function(dataset=FALSE) {
 
 
         Tabla <- data.frame(Estadístico=skewness(SA$residuals))
-        colnames(Tabla) <- c('Coeficiente de asimetría')
+        colnames(Tabla) <- c('Asymmetry coefficient')
         Tabla
       })
 
 
-      output$simetriaConclu <- renderText({
+      output$symmetryConclu <- renderText({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -811,12 +793,12 @@ aovbayes <- function(dataset=FALSE) {
         colnames(dataBY) <- c('Ind2','Dep2')
         SA <- (aov(Dep2 ~ Ind2, data=dataBY))
 
-        if (skewness(SA$residuals) > 0){
-          response=paste0('Según el coeficiente de asimetría, la distribución de los residuos tiene una asimetría positiva (Sesgo a la derecha)')
-        } else if (skewness(SA$residuals) < 0){
-          response=paste0('Según el coeficiente de asimetría, la distribución de los residuos tiene una asimetría negativa (Sesgo a la izquierda)')
+        if (round(skewness(SA$residuals),2) > 0){
+          response=paste0('According to the skewness coefficient, the distribution of the residuals has a positive skewness (Right bias)')
+        } else if (round(skewness(SA$residuals),2) < 0){
+          response=paste0('According to the skewness coefficient, the distribution of the residuals has a negative skewness (Left bias)')
         } else {
-          response=paste0('Según el coeficiente de asimetría, la distribución de los residuos es simétrica ')
+          response=paste0('According to the coefficient of skewness, the distribution of the residuals is symmetric.')
 
         }
         response
@@ -837,10 +819,10 @@ aovbayes <- function(dataset=FALSE) {
         SA <- (aov(Dep2 ~ Ind2, data=dataBY))
 
         if(skewness(SA$residuals) ==  0 ){
-          return(paste("Supuesto de Simetría: ","<span style=\"color:green;\"> Sí cumple.</span>"))
+          return(paste("Symmetry Assumption: ","<span style=\"color:green;\"> Is met.</span>"))
 
         }else{
-          return(paste("Supuesto de Simetría: ","<span style=\"color:red;\"> No cumple.</span>"))
+          return(paste("Symmetry Assumption: ","<span style=\"color:red;\"> Is not met.</span>"))
         }
       })
 
@@ -857,16 +839,16 @@ aovbayes <- function(dataset=FALSE) {
         Ind <- input$x
 
         Means <- aggregate(as.matrix(Data[,Dep]) ~ as.factor(as.matrix(Data[,Ind])), data = Data, mean)
-        colnames(Means) <- c('Nombres', 'Media')
+        colnames(Means) <- c('Names', 'Mean')
 
-        hcboxplot(x=as.numeric(as.matrix(Data[,Dep])), var=as.factor(as.matrix(Data[,Ind])), name = "Diagrama de cajas", color = "#0E1142", outliers = FALSE,
+        hcboxplot(x=as.numeric(as.matrix(Data[,Dep])), var=as.factor(as.matrix(Data[,Ind])), name = "Boxplot", color = "#0E1142", outliers = FALSE,
                   showInLegend=TRUE)%>%
           hc_yAxis(title = list(text = Dep))%>%
-          hc_xAxis(title = list(text = "Niveles"))%>%
+          hc_xAxis(title = list(text = "Levels"))%>%
           hc_chart(type = "column")%>%
           hc_plotOptions(showInLegend=TRUE,dataLabels=TRUE)%>%
-          hc_add_series(Means, type='bubble', hcaes(x =Nombres,y=Media),maxSize = "7%",
-                        tooltip=list(pointFormat='<br> {point.y} ',headerFormat='<b> Media'), name='Medias',
+          hc_add_series(Means, type='bubble', hcaes(x =Names,y=Mean),maxSize = "7%",
+                        tooltip=list(pointFormat='<br> {point.y} ',headerFormat='<b> Mean'), name='Means',
                         showInLegend=TRUE)
       })
       output$AovBY <- renderTable({
@@ -884,9 +866,9 @@ aovbayes <- function(dataset=FALSE) {
         Depend <- as.numeric(as.matrix(Data[,Dep]))
 
         dataBY <- data.frame(Ind2=Factor, Dep2=Depend)
-        colnames(dataBY) <- c('Tratamiento','Dep2')
+        colnames(dataBY) <- c('Treatment','Dep2')
         #str(dataBY)
-        Anovabyy <- (anovaBF(Dep2 ~ Tratamiento, data=dataBY, whichRandom = "ID",
+        Anovabyy <- (anovaBF(Dep2 ~ Treatment, data=dataBY, whichRandom = "ID",
                              rscaleFixed = prio,iterations = input$numberiterations))
 
 
@@ -899,7 +881,7 @@ aovbayes <- function(dataset=FALSE) {
         colnames(TabBY) <- c('Priori','BF10','Error')
         TabBY <- rbind(TabBY, c(1-prio,1,''))
 
-        rownames(TabBY) <- c('Modelo Alternativo', 'Modelo Nulo')
+        rownames(TabBY) <- c('Alternative Model', 'Null Model')
         TabBY <- cbind(rownames(TabBY),TabBY)
 
         names(TabBY)[1] <- ''
@@ -995,32 +977,17 @@ aovbayes <- function(dataset=FALSE) {
                       response=dataBY$Dep2,
                       predictor=as.numeric(dataBY$Tratamiento),
                       lambda=lambda)
-        #m <- stan_model(model_code = 'data {int<lower=0> N;int<lower=0> J;int<lower=1,upper=J> predictor[N];vector[N] response;}parameters {vector[J] eta;real mu;real<lower=0> sigmaalpha;real<lower=0> sigmaepsilon;}transformed parameters {vector[J] a;vector[N] yhat;a = mu + sigmaalpha * eta;for (i in 1:N)yhat[i] = a[predictor[i]];}model {eta ~ normal(0, 1);response ~ normal(yhat, sigmaepsilon);}')
 
-
-        #fit <- sampling(sm, data=pulpdat, chains=input$chainsnumber,  seed = 12345,iter=input$numberiterations)
         sm <- rstan::sampling(stanmodels$onewaymodel,
                               data=data2, chains=input$chainsnumber,
                               seed = 12345,iter=input$numberiterations,
                               open_progress =FALSE)
 
-       # sm <- rstan::sampling(m,
-        #                      data=data2, chains=input$chainsnumber,
-        #                      seed = 12345,iter=input$numberiterations)
+
         tab <- stan_summary(sm, par=c("mu","sigmaalpha","sigmaepsilon","a"),
                      probs  =c(.5,.025,.975))
-        #fit <- sm
-        #list_of_draws <- as_draws_df(fit)
-        #lists <- summarise_draws(list_of_draws)
-        #list_of_draws <- extract(fit,pars=c("mu","sigmaalpha","sigmaepsilon","a"))
 
-        #print(lists)
-       # fit.sum <- summary(fit, pars=c("mu","sigmaalpha","sigmaepsilon","a"))
-      #  fit.sum
-        #TablaPos <- fit
-        #TablaPos
         tab$par <- c('Mu','Sigma Alpha','Sigma Epsilon',unique(as.character(dataBY$Tratamiento)))
-        #rownames(tab) <- c('Mu','Sigma Alpha','Sigma Epsilon',unique(as.character(dataBY$Tratamiento)))
         DT::datatable(tab, extensions = 'FixedColumns',
                       options = list(
                         dom = 't',
@@ -1028,28 +995,7 @@ aovbayes <- function(dataset=FALSE) {
                         fixedColumns = TRUE,
                         pageLength = length(tab$par)
                       ))%>% formatSignif(c("mean", "se_mean", "sd","50%","2.5%","97.5%", "Rhat"), 3)
-
-
-
-        #TablaPos2 <- data.frame(rownames(TablaPos),TablaPos)
-        #colnames(TablaPos2) <- c('','Mean','SE Mean', 'SD', '2.5%','25%','50%','75%','97.5%','n eff','R hat')
-        #TablaPos2
-
-        #str(dataBY)
-        #Anovabyy <- (anovaBF(Dep2 ~ Tratamiento, data=dataBY, whichRandom = "ID",
-        #                     rscaleFixed = prio,iterations = input$numberiterations))
-        #
-        #post <- summary(posterior(Anovabyy,iterations = input$numberiterations))
-        #
-        #S <- data.frame(post[1][1])
-        #colnames(S) <- c('Media Posterior','Desv. Posterior','Naive SE','Time Series SE')
-        #rownames(S)[1] <- 'Media General'
-        #S <- cbind(rownames(S),S)
-        #names(S)[1] <- ''
-        #S
-      })
-
-
+    })
 
 
       output$AovBYposmcmc <- renderHighchart({
@@ -1064,66 +1010,36 @@ aovbayes <- function(dataset=FALSE) {
         Depend <- as.numeric(as.matrix(Data[,Dep]))
 
         dataBY <- data.frame(Ind2=Factor, Dep2=Depend)
-        colnames(dataBY) <- c('Tratamiento','Dep2')
+        colnames(dataBY) <- c('Treatment','Dep2')
         #str(dataBY)
-        Anovabyy <- (anovaBF(Dep2 ~ Tratamiento, data=dataBY, whichRandom = "ID",
+        Anovabyy <- (anovaBF(Dep2 ~ Treatment, data=dataBY, whichRandom = "ID",
                              rscaleFixed = prio,iterations = input$numberiterations))
 
         post <- (posterior(Anovabyy,iterations = input$numberiterations))
-        MCMC <- data.frame(Iteración=1:input$numberiterations,post[,])
+        MCMC <- data.frame(Iteration=1:input$numberiterations,post[,])
 
         if (input$mcmcCHAIN=="Mean and Variance"){
 
           highchart()%>%
-            hc_yAxis_multiples( list(top = "0%", height = "50%", title = list(text = "Media"),opposite=FALSE),
+            hc_yAxis_multiples( list(top = "0%", height = "50%", title = list(text = "Mean"),opposite=FALSE),
                                 list(top = "50%", height = "50%", title = list(text = "Sigma2") ,opposite=TRUE))%>%
-            hc_add_series(MCMC, type='line', hcaes(x=Iteración,y=mu),yAxis=0, name='Media',color='#24509C')%>%
-            hc_add_series(MCMC, type='line', hcaes(x=Iteración,y=sig2),yAxis=1, name='Sigma2',color='#31999C')
+            hc_add_series(MCMC, type='line', hcaes(x=Iteration,y=mu),yAxis=0, name='Mean',color='#24509C')%>%
+            hc_add_series(MCMC, type='line', hcaes(x=Iteration,y=sig2),yAxis=1, name='Sigma2',color='#31999C')
         } else {
 
           MCMCCom <- MCMC[,-c(2,ncol(MCMC),ncol(MCMC)-1)]
           rownames(MCMCCom) <- MCMC[,1]
           MCMCCom2 <- as.matrix(MCMCCom)
-          MCMCMer <- melt(MCMCCom, id.vars="Iteración")
+          MCMCMer <- melt(MCMCCom, id.vars="Iteration")
           highchart()%>%
-            hc_add_series(MCMCMer, type='line', hcaes(x=Iteración, y=value, group=variable))%>%
+            hc_add_series(MCMCMer, type='line', hcaes(x=Iteration, y=value, group=variable))%>%
             hc_title(text='MCMC chains')%>%
             hc_exporting(enabled = TRUE,
-                         filename = paste0('Cadenas de Marcov'))
+                         filename = paste0('Markov chains'))
 
         }
       })
 
-
-      #   output$AovBYposchains <- renderHighchart({
-      #     Data <- data()
-      #     Data <- na.omit(Data)
-      #     Dep <- input$y
-      #     Ind <- input$x
-      #     prio <- input$prior
-      #
-      #
-      #     Factor <- as.factor(as.matrix(Data[,Ind]))
-      #     Depend <- as.numeric(as.matrix(Data[,Dep]))
-      #
-      #     dataBY <- data.frame(Ind2=Factor, Dep2=Depend)
-      #     colnames(dataBY) <- c('Tratamiento','Dep2')
-      #     #str(dataBY)
-      #     Anovabyy <- (anovaBF(Dep2 ~ Tratamiento, data=dataBY, whichRandom = "ID",
-      #                          rscaleFixed = prio,iterations = input$numberiterations))
-      #
-      #     post <- (posterior(Anovabyy,iterations = input$numberiterations))
-      #
-      #     MCMC <- data.frame(Iteración=1:input$numberiterations,post[,])
-      #     MCMCCom <- MCMC[,-c(2,ncol(MCMC),ncol(MCMC)-1)]
-      #     rownames(MCMCCom) <- MCMC[,1]
-      #     MCMCCom2 <- as.matrix(MCMCCom)
-      #     MCMCMer <- melt(MCMCCom, id.vars="Iteración")
-      #     highchart()%>%
-      #      hc_add_series(MCMCMer, type='line', hcaes(x=Iteración, y=value, group=variable))%>%
-      #       hc_title(text='MCMC chains')
-      #   })
-      #
       output$AovBYposcurves <- renderHighchart({
         Data <- data()
         Data <- na.omit(Data)
@@ -1136,16 +1052,16 @@ aovbayes <- function(dataset=FALSE) {
         Depend <- as.numeric(as.matrix(Data[,Dep]))
 
         dataBY <- data.frame(Ind2=Factor, Dep2=Depend)
-        colnames(dataBY) <- c('Tratamiento','Dep2')
+        colnames(dataBY) <- c('Treatment','Dep2')
         #str(dataBY)
-        Anovabyy <- (anovaBF(Dep2 ~ Tratamiento, data=dataBY, whichRandom = "ID",
+        Anovabyy <- (anovaBF(Dep2 ~ Treatment, data=dataBY, whichRandom = "ID",
                              rscaleFixed = prio,iterations = input$numberiterations))
 
         post <- (posterior(Anovabyy,iterations = input$numberiterations))
 
-        MCMC <- data.frame(Iteración=1:input$numberiterations,post[,])
+        MCMC <- data.frame(Iteration=1:input$numberiterations,post[,])
         MCMCCom <- MCMC[,-c(2,ncol(MCMC),ncol(MCMC)-1)]
-        MCMCMer <- melt(MCMCCom, id.vars="Iteración")
+        MCMCMer <- melt(MCMCCom, id.vars="Iteration")
 
 
         ds <- map(levels(MCMCMer$variable), function(x){
@@ -1158,12 +1074,12 @@ aovbayes <- function(dataset=FALSE) {
           hc_add_series_list(ds)%>%
           hc_yAxis(title=list(text='Density'))%>%
           hc_exporting(enabled = TRUE,
-                       filename = paste0('Curvas de densidad - Distribuciones marginales posteriores.'))
+                       filename = paste0('Density curves - Posterior marginal distributions.'))
       })
 
 
 
-      output$conclusionaovby <- renderText({
+      output$conclutionaovby <- renderText({
 
         Data <- data()
 
@@ -1182,45 +1098,38 @@ aovbayes <- function(dataset=FALSE) {
                              rscaleFixed = prio))
 
 
-        # posterior(Anovabyy,iterations = 1000)
-        # plot(Anovabyy)
-
-
         S <- data.frame(Priori=prio, BF=Anovabyy[1])
         FB <- S[,2]
         if (FB <= 3 & FB > 1 ){
-          response <- paste0('Evidencia débil a favor del rechazo de la hipótesis nula ')
+          response <- paste0('Weak evidence in favor of rejection of the null hypothesis')
         } else if  (FB <= 10 & FB > 3 ) {
-          response <- paste0('Evidencia moderada a favor del rechazo de la hipótesis nula ')
+          response <- paste0('Moderate evidence in favor of rejection of the null hypothesis')
         } else if  (FB <= 30 & FB > 10 ){
-          response <- paste0('Evidencia fuerte a favor del rechazo de la hipótesis nula ')
+          response <- paste0('Strong evidence in favor of the rejection of the null hypothesis')
         }else if  (FB > 30 ){
-          response <- paste0('Evidencia decisiva  a favor del rechazo de la hipótesis nula')
+          response <- paste0('Decisive evidence in favor of the rejection of the null hypothesis')
         }else if  (FB < 1 & FB > 1/3 ){
-          response <- paste0('Evidencia débil a favor de la hipótesis nula ')
+          response <- paste0('Weak evidence in favor of the null hypothesis')
         }else if  (FB < 1/3 & FB > 1/10 ){
-          response <- paste0('Evidencia moderada a favor de la hipótesis nula ')
+          response <- paste0('Moderate evidence in favor of the null hypothesis')
         }else if  (FB <= 1/10 & FB > 1/30 ){
-          response <- paste0('Evidencia fuerte a favor de la hipótesis nula ')
+          response <- paste0('Strong evidence in favor of the null hypothesis')
         }else if  (FB < 1/30){
-          response <- paste0('Evidencia decisiva  a favor de de la hipótesis nula')
+          response <- paste0('Decisive evidence in favor of the null hypothesis')
         }else if  (FB == 1){
-          response <- paste0('No existe evidencia')}
+          response <- paste0('There is no evidence')}
 
         response
       })
 
 
-      output$diagramaSupuestos <- renderHighchart({
+      output$diagram <- renderHighchart({
         Data <- data()
-        #Data = Datas
         Data <- na.omit(Data)
         Dep <- input$y
         Ind <- input$x
-        #Ind <- "boneDev"
-        #Dep <- "growth"
+
         alph <- input$alpha
-        #alph <- 0.05
         Factor <- as.factor(as.matrix(Data[,Ind]))
         Depend <- as.numeric(as.matrix(Data[,Dep]))
 
@@ -1231,100 +1140,100 @@ aovbayes <- function(dataset=FALSE) {
         Test <- lillie.test(SA$residuals)
 
         if(Test$p.value >=  alph ){
-          col_normalidad= "#77DA85"
-          col_normalidad_si= "#77DA85"
-          col_normalidad_no= "#D5D5D5"
+          col_normality= "#77DA85"
+          col_normality_yes= "#77DA85"
+          col_normality_no= "#D5D5D5"
 
         }else{
-          col_normalidad= "#D5D5D5"
-          col_normalidad_si= "#D5D5D5"
-          col_normalidad_no= "#77DA85"
+          col_normality= "#D5D5D5"
+          col_normality_yes= "#D5D5D5"
+          col_normality_no= "#77DA85"
         }
 
         Bart <- bartlett.test(Dep2 ~ Ind2, data=dataBY)
 
         if(Bart$p.value >=  alph ){
-          col_homocedasticidad= "#77DA85"
-          col_homocedasticidad_si= "#77DA85"
-          col_homocedasticidad_no= "#D5D5D5"
+          col_homoscedasticity= "#77DA85"
+          col_homoscedasticity_yes= "#77DA85"
+          col_homoscedasticity_no= "#D5D5D5"
 
         }else{
-          col_homocedasticidad= "#D5D5D5"
-          col_homocedasticidad_si= "#D5D5D5"
-          col_homocedasticidad_no= "#77DA85"
+          col_homoscedasticity= "#D5D5D5"
+          col_homoscedasticity_yes= "#D5D5D5"
+          col_homoscedasticity_no= "#77DA85"
         }
 
         if(skewness(SA$residuals) ==  0 ){
-          col_simetria= "#77DA85"
-          col_simetria_si= "#77DA85"
-          col_simetria_no= "#D5D5D5"
+          col_symmetry= "#77DA85"
+          col_symmetry_yes= "#77DA85"
+          col_symmetry_no= "#D5D5D5"
 
         }else{
-          col_simetria= "#D5D5D5"
-          col_simetria_si= "#D5D5D5"
-          col_simetria_no= "#77DA85"
+          col_symmetry= "#D5D5D5"
+          col_symmetry_yes= "#D5D5D5"
+          col_symmetry_no= "#77DA85"
         }
 
         if(durbinWatsonTest(SA)[3] >=  alph){
-          col_independencia= "#77DA85"
-          col_independencia_si= "#77DA85"
-          col_independencia_no= "#D5D5D5"
+          col_independence= "#77DA85"
+          col_independence_yes= "#77DA85"
+          col_independence_no= "#D5D5D5"
 
         }else{
-          col_independencia= "#D5D5D5"
-          col_independencia_si= "#D5D5D5"
-          col_independencia_no= "#77DA85"
+          col_independence= "#D5D5D5"
+          col_independence_yes= "#D5D5D5"
+          col_independence_no= "#77DA85"
         }
 
 
 
-        if (col_simetria_si == "#77DA85"){
+        if (col_symmetry_yes == "#77DA85"){
           col_kw="#77DA85"
         } else {col_kw="#D5D5D5" }
 
-        if (col_homocedasticidad_si == "#77DA85"){
-          col_independencia="#77DA85"
-        } else {col_independencia="#D5D5D5" }
+        if (col_homoscedasticity_yes == "#77DA85"){
+          col_independence="#77DA85"
+        } else {col_independence="#D5D5D5" }
 
-        #  if (col_independencia_no == "#77DA85" | col_independencia_si == "#77DA85"){
-        #    col_independencia="#77DA85"
-        #  } else {col_independencia="#D5D5D5" }
+        #  if (col_independence_no == "#77DA85" | col_independence_yes == "#77DA85"){
+        #    col_independence="#77DA85"
+        #  } else {col_independence="#D5D5D5" }
 
-        if (col_normalidad_si== "#77DA85" & col_homocedasticidad_si== "#77DA85" ){
+        if (col_normality_yes== "#77DA85" & col_homoscedasticity_yes== "#77DA85" ){
           col_anova="#77DA85"
         }else {col_anova="#D5D5D5" }
 
 
-        if (col_simetria_si=="#77DA85" | col_simetria_no=="#77DA85"){
-          col_simetria= "#77DA85"
+        if (col_symmetry_yes=="#77DA85" | col_symmetry_no=="#77DA85"){
+          col_symmetry= "#77DA85"
         }
-        if (col_homocedasticidad_si=="#77DA85" | col_homocedasticidad_no=="#77DA85"){
-          col_homocedasticidad= "#77DA85"
+        if (col_homoscedasticity_yes=="#77DA85" | col_homoscedasticity_no=="#77DA85"){
+          col_homoscedasticity= "#77DA85"
         }
 
 
         highchart() %>%
           hc_chart(type = 'organization', inverted = TRUE) %>%
-          hc_add_series(name='Diagrama de técnicas según cumplimiento de supuestos',
+          hc_add_series(name='Diagram of techniques according to compliance with assumptions',
                         data = list(
-                          list(from = 'Comparación de medias por grupo', to = '¿Cumple supuesto de normalidad?'),
-                          list(from = '¿Cumple supuesto de normalidad?', to = 'Sí, cumple normalidad'),
-                          list(from = 'Sí, cumple normalidad', to = '¿Cumple supuesto de homocedasticidad?'),
-                          list(from = '¿Cumple supuesto de normalidad?', to = 'No cumple normalidad'),
-                          list(from = '¿Cumple supuesto de homocedasticidad?', to = 'Sí, cumple homocedasticidad'),
-                          list(from = 'Sí, cumple homocedasticidad', to = '¿Cumple supuesto de independencia?'),
-                          list(from = '¿Cumple supuesto de independencia?', to = 'Sí, cumple independencia'),
-                          list(from = '¿Cumple supuesto de independencia?', to = 'No cumple independencia'),
+                          list(from = 'Comparison of means by group', to = 'Does it comply with the normality assumption?'),
+                          list(from = 'Does it comply with the normality assumption?', to = 'Yes, it fulfills normality'),
+                          list(from = 'Yes, it fulfills normality', to = 'Does it meet the homoscedasticity assumption?'),
+                          list(from = 'Does it comply with the normality assumption?', to = 'It does not meet normality'),
+                          list(from = 'Does it meet the homoscedasticity assumption?', to = 'Yes, it fulfills homoscedasticity'),
+                          list(from = 'Yes, it fulfills homoscedasticity', to = 'Does it comply with the independence assumption?'),
+                          list(from = 'Does it comply with the independence assumption?', to = 'Yes, it fulfills independence'),
+                          list(from = 'Does it comply with the independence assumption?', to = 'It does not meet independence'),
 
-                          list(from = '¿Cumple supuesto de homocedasticidad?', to = 'No cumple homocedasticidad'),
-                          list(from = '¿Cumple supuesto de simetría?', to = 'Sí, cumple simetría'),
-                          list(from = '¿Cumple supuesto de simetría?', to = 'No cumple simetría'),
-                          #  list(from = 'Sí, cumple homocedasticidad', to = 'ANOVA Clásico'),
-                          #list(from = 'No cumple normalidad', to = '¿Cumple supuesto de simetría?'),
-                          list(from = 'No cumple homocedasticidad', to = '¿Cumple supuesto de simetría?')
-                          #list(from = 'Sí, cumple simetría', to = 'Kruskal Wallis'),
-                          #list(from = 'No cumple simetría', to = 'ANOVA Bayesiano'),
-                          # list(from = 'Comparación de medias por grupo', to = 'ANOVA Bayesiano')
+                          list(from = 'Does it meet the homoscedasticity assumption?', to = 'It does not meet homoscedasticity'),
+                          list(from = 'Does it meet the simmetry assumption?', to = 'Yes, it fulfills simmetry'),
+                          list(from = 'Does it meet the simmetry assumption?', to = 'It does not meet simmetry'),
+                          #  list(from = 'Yes, it fulfills homoscedasticity', to = 'ANOVA Cláyesco'),
+                          #list(from = 'It does not meet normality', to = '¿Cumple supuesto de yesmetría?'),
+                          list(from = 'It does not meet homoscedasticity', to = 'Does it meet the simmetry assumption?')
+                          #list(from = 'Sí, cumple yesmetría', to = 'Kruskal Wallis'),
+                          #list(from = 'No cumple yesmetría', to = 'ANOVA Bayeyesano'),
+                          # list(from = 'Comparación de medias por grupo', to = 'ANOVA Bayeyesano')
 
 
 
@@ -1333,29 +1242,29 @@ aovbayes <- function(dataset=FALSE) {
 
                         ),
                         nodes=  list(
-                          list(id = 'Comparación de medias por grupo', color="#77D0DA"),
-                          list(id = '¿Cumple supuesto de normalidad?', color=col_normalidad),
-                          list(id = 'Sí, cumple normalidad', color=col_normalidad_si),
-                          list(id = 'No cumple normalidad', color=col_normalidad_no),
-                          list(id = '¿Cumple supuesto de homocedasticidad?', color=col_homocedasticidad),
-                          list(id = 'Sí, cumple homocedasticidad', color=col_homocedasticidad_si),
-                          list(id = 'No cumple homocedasticidad', color=col_homocedasticidad_no),
-                          list(id = '¿Cumple supuesto de simetría?', color=col_simetria),
-                          list(id = 'Sí, cumple simetría', color=col_simetria_si),
-                          list(id = 'No cumple simetría', color=col_simetria_no),
-                          list(id = '¿Cumple supuesto de independencia?', color=col_independencia),
-                          list(id = 'Sí, cumple independencia', color=col_independencia_si),
-                          list(id = 'No cumple independencia', color=col_independencia_no)
-                          #list(id = 'ANOVA Clásico', color=col_anova),
+                          list(id = 'Comparison of means by group', color="#77D0DA"),
+                          list(id = 'Does it comply with the normality assumption?', color=col_normality),
+                          list(id = 'Yes, it fulfills normality', color=col_normality_yes),
+                          list(id = 'It does not meet normality', color=col_normality_no),
+                          list(id = 'Does it meet the homoscedasticity assumption?', color=col_homoscedasticity),
+                          list(id = 'Yes, it fulfills homoscedasticity', color=col_homoscedasticity_yes),
+                          list(id = 'It does not meet homoscedasticity', color=col_homoscedasticity_no),
+                          list(id = 'Does it meet the simmetry assumption?', color=col_symmetry),
+                          list(id = 'Yes, it fulfills simmetry', color=col_symmetry_yes),
+                          list(id = 'It does not meet simmetry', color=col_symmetry_no),
+                          list(id = 'Does it comply with the independence assumption?', color=col_independence),
+                          list(id = 'Yes, it fulfills independence', color=col_independence_yes),
+                          list(id = 'It does not meet independence', color=col_independence_no)
+                          #list(id = 'ANOVA Cláyesco', color=col_anova),
                           #list(id = 'Kruskal Wallis', color=col_kw),
-                          #list(id = 'ANOVA Bayesiano', color='#77DA85'))
+                          #list(id = 'ANOVA Bayeyesano', color='#77DA85'))
                         ))
 
       })
 
 
 
-      output$eleccionTecnica <- renderHighchart({
+      output$technique <- renderHighchart({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -1382,16 +1291,16 @@ aovbayes <- function(dataset=FALSE) {
 
         highchart() %>%
           hc_chart(type = 'organization', inverted=TRUE) %>%
-          hc_add_series(name='Diagrama de técnicas según cumplimiento de supuestos',
+          hc_add_series(name='Diagram of techniques according to compliance with assumptions',
                         data = list(
                           list(from = 'Kruskal Wallis', to = 'Kruskal Wallis'),
-                          list(from = 'ANOVA Clásico', to = 'ANOVA Clásico'),
-                          list(from = 'ANOVA Bayesiano', to = 'ANOVA Bayesiano')
+                          list(from = 'Classic ANOVA', to = 'Classic ANOVA'),
+                          list(from = 'Bayesian ANOVA', to = 'Bayesian ANOVA')
                         ),
                         nodes=  list(
-                          list(id = 'ANOVA Clásico', color=col_anova),
+                          list(id = 'Classic ANOVA', color=col_anova),
                           list(id = 'Kruskal Wallis', color=col_kw),
-                          list(id = 'ANOVA Bayesiano', color='#77DA85')
+                          list(id = 'Bayesian ANOVA', color='#77DA85')
                         ))
 
       })
@@ -1421,14 +1330,14 @@ aovbayes <- function(dataset=FALSE) {
         Depend <- as.numeric(as.matrix(Data[,Dep]))
         SA <-kruskal.test(Depend~Factor, data = Data)
         if (SA$p.value < input$alphakw){
-          response <- paste0('Existen diferencias significativas entre los grupos de ',Ind)
+          response <- paste0('There are significant differences between the groups of ',Ind)
         } else if  (SA$p.value > input$alphakw){
-          response <- paste0('No existen diferencias significativas entre los grupos de ',Ind)}
+          response <- paste0('There are no significant differences between the groups of ',Ind)}
 
         response
       })
 
-      output$KWpost <- renderTable({
+      output$KWpost <- DT::renderDataTable({
         Data <- data()
         Data <- na.omit(Data)
         Dep <- input$y
@@ -1439,8 +1348,15 @@ aovbayes <- function(dataset=FALSE) {
         Pares <- pairwise.wilcox.test(x = Depend, g = Factor, p.adjust.method = input$padjust )
         Pv <- Pares$p.value
         Pv[is.na(Pv)] <- ' - '
-        Pv <- cbind(rownames(Pv),Pv)
-        Pv
+        #Pv <- cbind(rownames(Pv),Pv)
+
+        DT::datatable(Pv, extensions = 'FixedColumns',
+                      options = list(
+                        dom = 't',
+                        scrollX = TRUE,
+                        fixedColumns = TRUE,
+                        pageLength = nrow(Pv)
+                      ))
       })
 
     })

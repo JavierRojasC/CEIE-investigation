@@ -1,0 +1,6 @@
+- Camara
+- Deteccion de cara
+- Estimación de pose de la cabeza
+- Verficación (clasificar a la persona como una de las persona en la base de datos=
+- Identificación de comportamiento en base de gestos faciales
+- Alarma si se encuentra algo raro en el punto anterior

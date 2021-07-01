@@ -1,0 +1,6 @@
+Un pca sparse por si solo puede dar resultados que son dispersos y no estables, lo que no ayuda a la interpretación de cada componente. (lo cual es el objetivo pricipal de sparse pca).
+
+Utilizar inforamción previa sobre la estructura de los datos puede ayudar a aliviar este problema. Se incopora una penalidad elastic net (identifica que variables explican más como grupo) estructural de sparsity en los vectores de cargas para identificar regiones estables que capturas la mayor variabilidad.
+
+Es decir, se vale de la distribución estructurada de los datos (en regiones) para encontrar las regiones que más aportan variabilidad.
+
