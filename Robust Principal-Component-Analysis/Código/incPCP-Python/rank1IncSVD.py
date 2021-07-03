@@ -4,7 +4,6 @@ import numpy as np
 def  rank1IncSVD(Uo, So, Vo, curFrame, flag):
   
     Nrows,Ncols =Uo.shape
-    
     r = Uo.T@curFrame
     z = curFrame - Uo@r
     rho = np.sqrt(np.sum( z*z ))
@@ -28,7 +27,9 @@ def  rank1IncSVD(Uo, So, Vo, curFrame, flag):
     St= np.append(St,zeros,axis=0)
 
     Gu,S1,Gv = np.linalg.svd(St)
-    
+    # print(Gu)
+    # print(S1)
+    # print(Gv)    
     #diag para transformar en matriz como en matlab(necesario)
     S1=np.diag(S1)
     
@@ -36,9 +37,11 @@ def  rank1IncSVD(Uo, So, Vo, curFrame, flag):
     Gv=Gv.T
     
     dS1 = np.diag(S1)
+    
     rel = 100*dS1[-1]/np.sum(dS1[0:-1])
     
-    if rel > 100:
+    print(rel)
+    if rel >10:
       flag = 0
     
     
@@ -52,15 +55,15 @@ def  rank1IncSVD(Uo, So, Vo, curFrame, flag):
    
     
     else:
-          S  = S1[1-1:Ncols, 1-1:Ncols]
+        S  = S1[1-1:Ncols, 1-1:Ncols]
         
-          U  = Uo@Gu[1-1:Ncols, 1-1:Ncols] + p@Gu[Ncols:Ncols+1,1-1:Ncols]
+        U  = Uo@Gu[1-1:Ncols, 1-1:Ncols] + p@Gu[Ncols:Ncols+1,1-1:Ncols]
 
 
-          Gv1=Gv[1-1:Ncols,1-1:Ncols]
-          VoGv1=Vo@Gv1
-          Gv2=Gv[Ncols:Ncols+1,1-1:Ncols]
-          V  = np.concatenate((VoGv1,Gv2))
+        Gv1=Gv[1-1:Ncols,1-1:Ncols]
+        VoGv1=Vo@Gv1
+        Gv2=Gv[Ncols:Ncols+1,1-1:Ncols]
+        V  = np.concatenate((VoGv1,Gv2))
       
        
     

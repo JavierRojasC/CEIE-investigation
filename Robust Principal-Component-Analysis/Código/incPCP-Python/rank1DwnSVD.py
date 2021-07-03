@@ -12,7 +12,7 @@ def rank1DwnSVD(Uo, So, Vo, k):
     
     #numpy devuelve Vo ya transpuesta mientras que matlab no
     #toca hacer trasnpuerta para obtener los mismos resultados
-    #tomar en cuenta que si el input Vo de la funcion ya esta transversa 
+    #tomar en cuenta que si el input Vo de la funcion ya esta transpuesta
     #no hay que hacer nada (opcional)   
     #Vo=Vo.T
     

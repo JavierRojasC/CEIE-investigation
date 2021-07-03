@@ -9,7 +9,8 @@ def readFrame(url,gray):
     
     if gray:
        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)      
-    frame=frame/255.0   
+    frame=  cv2.resize(frame,None,fx=0.75,fy=0.75)
+
     cap.release() 
     return frame
   
