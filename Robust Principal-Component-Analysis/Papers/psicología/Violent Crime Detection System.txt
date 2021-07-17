@@ -1,0 +1,11 @@
+comunicación verbal y no verbal (movimiento del cuerpo como expresiones faciales,gestos y posturas), vocalización, el uso del espacio y contacto visual para determinar detectar crimen violento.
+
+Información extra de terceras fuentes como por ejemplo estadísticas de crimen, información sobre el pasado criminal de una persona, estado de salud y etc.. puden ser incluidas dentro del análisis para hacer lo más preciso.
+Componentes 
+
+-información primaria: imagen o video
+-procesamiento de la información: mejorar resolución, detección de humanos, detección de caras, detección de puntos faciales y emociones (se pueden aplicar algoritmos distintons para obtener información de cada uno de estos pasos de procesamiento)
+-incorporar información de terceros
+-clasificador
+
+mejorar resolución: https://github.com/alexjc/neural-enhance

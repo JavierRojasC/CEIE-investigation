@@ -1,0 +1,5 @@
+El pca tradicional no es bueno capturando relaciones no lineales de los datos, por lo que se introduce la idea del kernel pca, el cual usando el truco del kernel lleva a los datos a una dimensión en la cual tengan relaciones lineales.
+
+El kernal pca sufre de uno de los mismos problemas que el pca tradicional, todas las cargas son distintas de cero por lo que todas las variables deben ser almacenadas para su uso lo que conlleva un mayor costo computacional y de memoria.
+
+Se propone un algoritmo de elastic net net (identifica que variables explican más como grupo)  para sparce kernel pca que hace que algunas de las cargas se vuelvan cero para aliviar este problema

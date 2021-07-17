@@ -1,0 +1,5 @@
+Las expresiones de las emociones en el contexto biologico (gestos de la cara y/o cuerpo,forma de movernos, huellas digitales) pueden variar mucho de persona a persona y de cultura a cultura.
+
+si de por si existen falsos positivos solo en reconocimiento facial, al tratar de hacer recocimiento "emocional" esta tasa de falsos positivios solo incrementaría.
+
+Una posible forma de reducir dicha tasa sería entrenar el modelo para los gestos de cada persona involucrada en el area donde se va implementar el algoritmo. Surgen muchas interrogantes a partir de esta "solución". Es computacional y economicamente feasible hacerlo? Cuánto tiempo necesitaría para ser entrenado por cada persona?

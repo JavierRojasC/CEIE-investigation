@@ -1,0 +1,39 @@
+Social signals processing (SSP) campo donde se estudian de manera sistematica algoritmos y analisis computacionales de las señales sociales . Va más allá de el modelado de la actividad humana y apunta a codificar y descodificar el *comportamiento* humano.
+
+Investigaciones muestras que los humanos usan señales comportacionales no verbales como expresiones faciales, vocalización o postura para comunicar, generalmente de manera no conciente, su actitud frente otras personas y habitads sociales asi tambien como emociones.
+
+Se ha hecho poco para incorporar SSP en el contexto de video vigilancia donde el objetivo principal es detectar acciones violentas lo antes posible, es por esto que observar el comportamiento humano como un fenomeno sujeto a principios rigurosos que producen patrones predecibles de actividad es de suma importancia.
+
+Un sistema básico de video vigilancia 
+
+*Input de video
+Bajo nivel:
+	-Remoción de "background"/segmentación de objeto
+	-Detección de objetos (se puede hacer despues de remover el 	"background"/segmentación de objeto o de manera densa en toda la imagen)
+Alto nivel:
+	-Seguimiento de objetos
+	-Análisis de actividad
+*Sálida del análisis
+
+Los pasos de -Remoción de "background"/segmentación de objeto y Detección de objetos no se benefician de SSP porque solo son tecnicas de extraccion de pixeles.
+
+-Seguimiento de objetos: computar la trayectoria de cada objeto de interes en escena asociandole un ID para manternerlo a lo largo de varias escenas y camaras. ( spatio-temporal motion-based model). Pasos:
+	- 1) localizar el target a ser seguido (detección de objetos)
+	- 2)la fase dinámica predice donde es más probable que se mueva el target 		(usualmente basandode es un modelo autoregresivo de primer o segundo orden=
+	- 3) la fase de observación encuentra la región de la imagen que es más simiñar 	al target basandose en los resultados de la fase dinámica.
+
+El seguimiento de objetos y en espcial la fase dinámica se beneficiarian del uso de SSP ya que esta parte no toma en cuenta que las personas cuando son lobres de moverse en grandes espacios respetan patrones y trayectorias altamente dominidas por mecanismos sociales
+
+El análisis de actividad toma las trayectorias calculadas anteriorermente y devuelve una descripcion de las actividades que estan siendo llevadas a cabo bajo la forma de modelos parametricos (un modelo para cada actividad por ejemplo, caminar,correr,agacharse) o en forma de lenguaje natural. El SSP tomaria en consideracion que las actividades llevadas a cabo en un espacio son dependientes fuertemente del contexto, la definicion de actividades posibles y "normales" dependeria en que tipo de ambiente se encuentre (aeropuertos, parqueaderos,etc..)
+
+Dinstintas propuestas aparecen en esta parte siendo algunas de ellas usar redes neuronales segun para encontrar actividades que puedan ser catalogadas como atipicas dependiendo del contexto, otra posibilidad es incoporar información del espacio especificando que determinadas zonas son zonas de entrada/salidas,uniones,rutras,"sinks","fuentes" y zonas de stop.
+
+Al imcoporar toda esta informacion estamos reduciendo los problemas que ocurren con las implementaciones anteriores que no toman en cuenta el contexto y podrian calsificar como comportamientos  peligrosos a patrones de comportamiento perfectamente normales en ese contexto.
+
+Existe el estudio de comporamiento de patrones de comportamientos de grupos humanos, pero muchas de las tecnicas aplicadas al estudio de individuos no son apropiadas para los grupos.
+
+Gestos,posturas,expresiones faciales y direccion de la mirada pueden ser incluidas en el analisis de comportamiento para mejorar su precisión
+
+En el campo de la visión existe el Visual Focus of Attention (VFOA) puede ser aproximado mediante un polihedro 3d delimitado por la escena que el sujeto está observando.Se pueden llevar a cabo analisis de ahcia donde y que la mayoria de las personas estan  observando y notar a individuos que se concentran en zonas particulares del esapcio. (por ejeomlo si el target de observación de una persona es critico por mucho tiempo (un ATM) se podría inferir comportamente problematico).
+
+El manejo del espacio y del espacio interpersonal también es importante porque sirve para determi nar grupos(un grupo da la posibilidad a todos los participantes de interactuar y de separar al grupo de otros individuos ajenos al grupo) o si una persona está violando los distintos espacios por iniciativa propia mientras la otra persona no.
