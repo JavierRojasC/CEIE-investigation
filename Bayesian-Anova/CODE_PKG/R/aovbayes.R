@@ -1,23 +1,47 @@
+#' @importFrom stats TukeyHSD aggregate bartlett.test density kruskal.test lm na.omit pairwise.wilcox.test qnorm qqnorm quantile sd shapiro.test
+#' @importFrom utils read.csv2 str
+#' @importFrom graphics hist
+#' @importFrom DT renderDataTable
+#' @importFrom DT datatable
+#' @importFrom DT formatSignif
+#' @importFrom shinydashboard sidebarMenu
+#' @importFrom shinydashboard menuItem
+#' @importFrom shinydashboard menuSubItem
+#' @importFrom shinydashboard tabItem
+#' @importFrom shinydashboard tabItems
+#' @importFrom shinydashboard dashboardBody
+#' @importFrom car durbinWatsonTest
+#' @importFrom reshape melt
+#' @importFrom shiny column fluidRow htmlOutput icon numericInput reactive renderPrint renderTable renderText renderUI runApp selectInput shinyApp sliderInput stopApp tableOutput tabPanel uiOutput withMathJax verbatimTextOutput
+#' @import shinycssloaders shinydashboardPlus tibble BayesFactor broom dplyr highcharter moments nortest rstan rstantools stringr waiter
+#' @importFrom car some
+#' @importFrom purrr map
+
+
+globalVariables(c("aov","fluidRow","column","a","img","dashboardPage","tagList","spin_three_bounce","textOutput","h3","Trat","upr","Trat","upr","lwr","hist","Names","Mean","se_mean","n_eff","names_from_WB","Iteration","mu","sig2","value","HTML","h2","radioButtons","checkboxInput","fileInput","variable"))
+
+
+
 aovbayes <- function(dataset=FALSE) {
 
-  require(shiny)
-  require(highcharter)
-  require(shinydashboard)
-  require(shinydashboardPlus)
-  require(BayesFactor)
-  require(dplyr)
-  require(waiter)
-  require(broom)
-  require(nortest)
-  require(moments)
-  require(car)
-  require(DT)
-  require(shinycssloaders)
-  require(rstan)
-  require(rstantools)
-  require(reshape)
-  require(purrr)
-  require(stringr)
+ # require(shiny)
+ # require(highcharter)
+ # require(shinydashboard)
+ # require(shinydashboardPlus)
+ # require(BayesFactor)
+ # require(dplyr)
+ # require(waiter)
+ # require(broom)
+ # require(nortest)
+ # require(moments)
+ # require(car)
+ # require(DT)
+ # require(shinycssloaders)
+ # require(rstan)
+ # require(rstantools)
+ # require(reshape)
+ # require(purrr)
+ # require(stringr)
 
   left_footer <- fluidRow(
     column(
@@ -28,7 +52,7 @@ aovbayes <- function(dataset=FALSE) {
         target = "_blank",
         img(src = "https://github.com/JavierRojasC/JavierRCam/blob/master/fcnm.png?raw=true", height = "30px"),
         class = "dropdown",
-        title = "Facultad de Ciencias Naturales y Matemáticas")
+        title = "Facultad de Ciencias Naturales y Matematicas")
     )
   )
 
@@ -139,7 +163,7 @@ aovbayes <- function(dataset=FALSE) {
                        ),
                        tabItem(tabName = "Assumptions",
                                sliderInput(inputId = 'alpha',
-                                           label='Enter Alpha (Type 1 Error)',
+                                           label='Enter Alpha (Type I Error)',
                                            value=0.05,
                                            min=0,
                                            max=1),
@@ -159,7 +183,7 @@ aovbayes <- function(dataset=FALSE) {
                                           withSpinner(highchartOutput('homoscedasticity',  height = "350px"), type = 7, color='#C7D5EB')
                                    ),
                                    column(6,
-                                          h2('Homoscedasticity by Bartlett´s test'),
+                                          h2('Homoscedasticity by Bartlett`s test'),
                                          tableOutput('homoscedasticityBart'),
                                           h3(textOutput('homoscedasticityConclu')),
                                           h2(htmlOutput('CumpleHomoc'))
@@ -189,13 +213,15 @@ aovbayes <- function(dataset=FALSE) {
 
                        tabItem(tabName = "ANOVAcl",
                                sliderInput(inputId = 'alpha2',
-                                           label='Enter Alpha (Type 1 Error)',
+                                           label='Enter Alpha (Type I Error)',
                                            value=0.05,
                                            min=0,
                                            max=1),
 
-                               box(title = "Classic ANOVA Table",collapsible = TRUE,
-                                   tableOutput('Aov'),
+                               box(width=12,
+                                     title = "Classic ANOVA Table",collapsible = TRUE,
+                                   column(width=12,align="center",
+                                   tableOutput('Aov')),
                                    h2("Conclution"),
                                    h3(textOutput('conclutionAov'))),
                                column(12,withSpinner(highchartOutput('Box',  height = "450px"), type = 7, color='#C7D5EB')),
@@ -209,7 +235,7 @@ aovbayes <- function(dataset=FALSE) {
                        ),
                        tabItem(tabName = "KW",
                                sliderInput(inputId = 'alphakw',
-                                           label='Enter Alpha (Type 1 Error)',
+                                           label='Enter Alpha (Type I Error)',
                                            value=0.05,
                                            min=0,
                                            max=1),
@@ -463,13 +489,13 @@ aovbayes <- function(dataset=FALSE) {
         if (length(SA$residuals)>30){
 
           Test <- lillie.test(SA$residuals)
-          Tabla <- data.frame(Estadístico=signif(Test$statistic,4),
+          Tabla <- data.frame(Statistic=signif(Test$statistic,4),
                               ValP=signif(Test$p.value,4))
           colnames(Tabla) <- c('KS Statistic','p-value')
           Tabla
         } else {
           Test <- shapiro.test(SA$residuals)
-          Tabla <- data.frame(Estadístico=Test$statistic,
+          Tabla <- data.frame(Statistic=Test$statistic,
                               ValP=Test$p.value)
           colnames(Tabla) <- c('Shapiro-Wilk statistic','p-value')
           Tabla
@@ -512,7 +538,7 @@ aovbayes <- function(dataset=FALSE) {
         SA <- (aov(as.numeric(as.matrix(Data[,Dep]))~as.factor(as.matrix(Data[,Ind]))))
         if (length(SA$residuals)>30){
 
-          response=paste0('Normality by Kolmogórov-Smirnov test')
+          response=paste0('Normality by Kolmogorov-Smirnov test')
 
           response
         } else {
@@ -608,7 +634,7 @@ aovbayes <- function(dataset=FALSE) {
         Bart <- bartlett.test(Dep2 ~ Ind2, data=dataBY)
         Tabla <- data.frame(Statistic=signif(Bart$statistic,4),
                             ValP=signif(Bart$p.value,4))
-        colnames(Tabla) <- c('Bartlett´s K-square statistic','p-value')
+        colnames(Tabla) <- c('Bartlett`s K-square statistic','p-value')
         Tabla
       })
 
@@ -774,7 +800,7 @@ aovbayes <- function(dataset=FALSE) {
         SA <- (aov(Dep2 ~ Ind2, data=dataBY))
 
 
-        Tabla <- data.frame(Estadístico=skewness(SA$residuals))
+        Tabla <- data.frame(Statistic=skewness(SA$residuals))
         colnames(Tabla) <- c('Asymmetry coefficient')
         Tabla
       })
@@ -1228,12 +1254,9 @@ aovbayes <- function(dataset=FALSE) {
                           list(from = 'Does it meet the homoscedasticity assumption?', to = 'It does not meet homoscedasticity'),
                           list(from = 'Does it meet the simmetry assumption?', to = 'Yes, it fulfills simmetry'),
                           list(from = 'Does it meet the simmetry assumption?', to = 'It does not meet simmetry'),
-                          #  list(from = 'Yes, it fulfills homoscedasticity', to = 'ANOVA Cláyesco'),
-                          #list(from = 'It does not meet normality', to = '¿Cumple supuesto de yesmetría?'),
+
                           list(from = 'It does not meet homoscedasticity', to = 'Does it meet the simmetry assumption?')
-                          #list(from = 'Sí, cumple yesmetría', to = 'Kruskal Wallis'),
-                          #list(from = 'No cumple yesmetría', to = 'ANOVA Bayeyesano'),
-                          # list(from = 'Comparación de medias por grupo', to = 'ANOVA Bayeyesano')
+
 
 
 
@@ -1255,9 +1278,7 @@ aovbayes <- function(dataset=FALSE) {
                           list(id = 'Does it comply with the independence assumption?', color=col_independence),
                           list(id = 'Yes, it fulfills independence', color=col_independence_yes),
                           list(id = 'It does not meet independence', color=col_independence_no)
-                          #list(id = 'ANOVA Cláyesco', color=col_anova),
-                          #list(id = 'Kruskal Wallis', color=col_kw),
-                          #list(id = 'ANOVA Bayeyesano', color='#77DA85'))
+
                         ))
 
       })

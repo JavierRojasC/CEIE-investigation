@@ -2,11 +2,18 @@
 \alias{aovbayes}
 \title{Interactive panel ANOVA classic, non parametric and bayesian}
 \usage{
-aovbayes()
+aovbayes(dataset)
 }
 \description{
 Interactive panel to visualize and develop one-way analysis of variance models, from the classical, non-parametric and Bayesian approach.
 }
+\arguments{
+\item{dataset}{Data set}
+}
+
 \examples{
-aovbayes()
+# data("PollutionData")
+# aovbayes(PollutionData)
+
+# aovbayes()
 }
