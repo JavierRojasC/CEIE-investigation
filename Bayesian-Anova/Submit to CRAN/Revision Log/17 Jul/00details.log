@@ -1,0 +1,20 @@
+Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
+Check: CRAN incoming feasibility, Result: NOTE
+  Maintainer: 'Mauricio Javier Rojas Campuzano <maujroja@espol.edu.ec>'
+  
+  New submission
+  
+  Possibly mis-spelled words in DESCRIPTION:
+    AovBay (3:8)
+  
+  The Title field is just the package name: provide a real title.
+
+Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
+Check: DESCRIPTION meta-information, Result: NOTE
+  Author field differs from that derived from Authors@R
+    Author:    'Mauricio Javier Rojas Campuzano'
+    Authors@R: 'Mauricio Rojas-Campuzano [aut, cre, ctb], Johny Pambabay-Calero [aut, ctb], Sergio Bauz-Olvera [ctb], Omar Ruiz-Barzola [ctb]'
+  
+  Maintainer field differs from that derived from Authors@R
+    Maintainer: 'Mauricio Javier Rojas Campuzano <maujroja@espol.edu.ec>'
+    Authors@R:  'Mauricio Rojas-Campuzano <maujroja@espol.edu.ec>'
