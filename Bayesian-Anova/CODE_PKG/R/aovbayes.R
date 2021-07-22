@@ -12,16 +12,29 @@
 #' @importFrom shinydashboard dashboardBody
 #' @importFrom car durbinWatsonTest
 #' @importFrom reshape melt
-#' @importFrom shiny column fluidRow htmlOutput icon numericInput reactive renderPrint renderTable renderText renderUI runApp selectInput shinyApp sliderInput stopApp tableOutput tabPanel uiOutput withMathJax verbatimTextOutput
+#' @importFrom shiny column radioButtons textOutput checkboxInput fileInput fluidRow htmlOutput icon numericInput reactive renderPrint renderTable renderText renderUI runApp selectInput shinyApp sliderInput stopApp tableOutput tabPanel uiOutput withMathJax verbatimTextOutput
 #' @import shinycssloaders shinydashboardPlus tibble BayesFactor broom dplyr highcharter moments nortest rstan rstantools stringr waiter
 #' @importFrom car some
+#' @import htmltools
 #' @importFrom purrr map
-
 
 globalVariables(c("aov","fluidRow","column","a","img","dashboardPage","tagList","spin_three_bounce","textOutput","h3","Trat","upr","Trat","upr","lwr","hist","Names","Mean","se_mean","n_eff","names_from_WB","Iteration","mu","sig2","value","HTML","h2","radioButtons","checkboxInput","fileInput","variable"))
 
 
 
+
+
+#' Interactive panel ANOVA classic, non parametric and bayesian
+#'
+#' Interactive panel to visualize and develop one-way analysis of variance models, from the classical, non-parametric and Bayesian approach.
+#' @param dataset Data set
+#' @return A shiny panel with the classical, non-parametric and Bayesian analyzes of variance, based on the specification of the dependent and independent variable of the data set provided in \code{dataset}, also provides a decision diagram that suggests which method is appropriate, based on the assumptions of the models.
+#' @examples
+#' \dontrun{
+#' data(PollutionData)
+#' aovbayes(PollutionData)
+#' }
+#' @export
 aovbayes <- function(dataset=FALSE) {
 
  # require(shiny)
@@ -43,20 +56,20 @@ aovbayes <- function(dataset=FALSE) {
  # require(purrr)
  # require(stringr)
 
-  left_footer <- fluidRow(
-    column(
-      width = 6,
-      align = "left",
-      a(
-        href = "http://www.fcnm.espol.edu.ec/",
-        target = "_blank",
-        img(src = "https://github.com/JavierRojasC/JavierRCam/blob/master/fcnm.png?raw=true", height = "30px"),
-        class = "dropdown",
-        title = "Facultad de Ciencias Naturales y Matematicas")
-    )
-  )
+ # left_footer <- fluidRow(
+ #   column(
+ #     width = 6,
+ #     align = "left",
+ #     a(
+ #       href = "http://www.fcnm.espol.edu.ec/",
+ #       target = "_blank",
+ #       img(src = "https://github.com/JavierRojasC/JavierRCam/blob/master/fcnm.png?raw=true", height = "30px"),
+ #       class = "dropdown",
+ #       title = "Facultad de Ciencias Naturales y Matematicas")
+ #   )
+ # )
 
-  app <- list(
+  runApp(list(
     ui = dashboardPage(
       preloader = list(html = tagList(spin_three_bounce(), h3("Please wait a moment ...")), color = "#1E3A4E"),
 
@@ -292,7 +305,7 @@ aovbayes <- function(dataset=FALSE) {
                        )
                      ))),
     dashboardFooter(
-      left = left_footer,
+      left = NULL,
       right = NULL),
 
     server = function(input, output) {
@@ -1380,6 +1393,5 @@ aovbayes <- function(dataset=FALSE) {
                       ))
       })
 
-    })
-  runApp(app)
+    }))
 }

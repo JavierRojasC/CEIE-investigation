@@ -1,6 +1,6 @@
 Package: AovBay
 Type: Package
-Title: AovBay
+Title: Classic, Nonparametric and Bayesian One-Way Analysis of Variance Panel
 Version: 0.1.0
 Authors@R: c(person("Mauricio", "Rojas-Campuzano", role = c("aut", "cre","ctb"),
                      email = "maujroja@espol.edu.ec"),
@@ -10,9 +10,7 @@ Authors@R: c(person("Mauricio", "Rojas-Campuzano", role = c("aut", "cre","ctb"),
                      email = "serabauz@espol.edu.ec"),
               person("Omar", "Ruiz-Barzola", role = "ctb",
                      email = "oruiz@espol.edu.ec"))
-Author: Mauricio Javier Rojas Campuzano
-Maintainer: Mauricio Javier Rojas Campuzano <maujroja@espol.edu.ec>
-Description: Package developed for the visualization and presentation of one-way analysis of variance models, with a classical, non-parametric and Bayesian approach.
+Description: It covers various approaches to analysis of variance, provides an assumption testing section in order to provide a decision diagram that allows selecting the most appropriate technique. It provides the classical analysis of variance, the nonparametric equivalent of Kruskal Wallis, and the Bayesian approach. These results are shown in an interactive shiny panel, which allows modifying the arguments of the tests, contains interactive graphics and presents automatic conclusions depending on the tests in order to contribute to the interpretation of these analyzes. 'AovBay' uses 'Stan' and 'FactorBayes' for Bayesian analysis and 'Highcharts' for interactive charts.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -41,7 +39,8 @@ Imports:
     purrr,
     shinycssloaders,
     stringr,
-    waiter
+    waiter,
+    htmltools
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),
