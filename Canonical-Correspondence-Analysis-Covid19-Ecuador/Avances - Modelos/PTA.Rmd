@@ -1,0 +1,26 @@
+---
+title: "PTA"
+author: "William F. Tandazo Vargas"
+date: "10/7/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ade4)
+ktabbiovol3mscaled <- ktab.list.df(lapply(rapply(lapply(lapply(split(cbind(codes$Lettre,biovol3m),codes$Lettre),
+                                                               
+function(x) {return( x[,-1])}),scale),
+function(XX) {apply(XX, c(1,2), function(ll)
+  
+{if(!is.nan(ll)){ll} else {0}})},
+how="replace"),as.data.frame))
+
+row.names(ktabbiovol3mscaled) <-
+c("06/03/2006","04/04/2006","03/05/2006","07/06/2006","28/06/2006","04/07/2006","24/07/200
+6","07/08/2006","22/08/2006","05/09/2006","19/09/2006") 
+```
+

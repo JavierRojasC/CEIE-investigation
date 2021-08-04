@@ -1,0 +1,104 @@
+---
+title: "Análisis Factorial Multiple"
+author: "William F Tandazo V"
+date: "13/7/2021"
+header-includes:
+  - \usepackage{bbm}
+  - \usepackage{threeparttable}
+  - \usepackage{booktabs}
+  - \usepackage{expex}
+output:
+  pdf_document: 
+    latex_engine: xelatex
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Análisis Factorial Multiple.
+
+## Introducción. 
+
+> El análisis factorial múltiple (**AFM**) es parte del grupo de modelos factoriales adaptado al tratamiento de tablas de datos en las que un mismo conjunto de individuos se describe a través de varios grupos de variables. Este grupo de variables puede surgir de utilizar de manera conjunta variables de naturaleza distinta, cuantitativas, cualitativas , de distintos periodos de tiempo entre otros. 
+
+> El **AFM** se basa en el modelo de componentes principales (ACP) en el sentido de que cada tabla se “normaliza” dividiendo sus elementos por su primer valor singular. Luego todas estas tablas normalizadas se concatenan en una gran tabla que será analizada por medio de un **ACP** no normalizado que producirán el conjunto de **factores de puntuación** de las observaciones y las cargas o pesos de cada variable. Dicho lo anterior, las metas que provee este método es el de poder analizar varios conjuntos de datos medidas para las mismas observaciones, producir los factores de puntación comunes para estos conjuntos y proyectar cada uno de estos conjuntos en estos factores para así encontrar comunalidades o discrepancias. 
+
+> La idea principal del AFM es normalizar individualmente cada conjunto de datos para que la componente principal de este tenga la misma dimensión, para que a continuación se combinen cada uno de estos conjuntos de datos para que formen una sola representación común llamada “consenso”.  Las coordenadas de las observaciones dentro de los componentes las llamaremos **factores de puntuación**. Estos factores son usados para graficar mapas de las observaciones, de esta manera se podrá ver fácilmente las distancias entre estas observaciones que reflejan la similaridad entre estas. Como las componentes son obtenidas a partir de la combinación de las variables originales, cada una de las variables va a contribuir a los componentes de una manera distinta. Son a estas contribuciones las que llamaremos cargas o pesos de las variables en el componente, estas cargas reflejan que tanto aporta cada variable para explicar el componente. 
+
+## Materiales y Métodos. 
+
+> Antes de profundizar en el modelo matemático del AFM repasaremos el concepto de ACP y dos herramientas matemáticas más que necesitaremos.
+
+## Análisis de Componentes principales.
+
+> El Análisis de componentes principales es un proceso el cual se transforma un conjunto de p variables correlacionadas en otro conjunto de nuevas variables incorreladas entre si el cual llamaremos conjunto de componentes principales. Estas nuevas variables son combinaciones lineales del conjunto de variables original, y se van ordenando según el orden de importancia en cuanto a la variabilidad que logran explicar. 
+
+### Modelo Matemático del ACP.
+
+> Supongamos tenemos una muestra con las observaciones de **p** variables, cada uno de con **n** individuos. Definimos nuestra matriz de datos **X** de dimensión **nxp**, **n** es el numero de observaciones totales de la muestra y **p** el numero de variables obtenidas x_{1},...,x_{p}. Buscaremos la combinación linear de las p variables que maximice la varianza explicada. Esta combinación linear se expresa de la siguiente manera: 
+
+$$
+\sum_{j=1}^{p}a_{j}x_{j}=Xa
+$$
+> Donde x_{j} es el vector de observaciones de la j-ésima variable y a es un vector de constantes a_{1},...,a_{p}. Esta combinacion lineal tambien se puede expresar como la multiplicacion de la matriz de datos **X** por el vector de constantes **a**. Lo siguiente será obtener la varianza de las combinaciones lineales, se expresa de la siguiente manera: 
+
+$$
+Var(Xa)=a^{T}Sa
+$$
+> Donde **S** será la matriz de covarianzas asociada a la matriz de datos **X** y a^{T} es la transpuesta del vector de constantes. Nuestro objetivo sera de encontrar el vector que maximice el producto a^{T}Sa. Para esto usaremos el método de multiplicadores de Lagrange:
+
+$$
+a^{T}Sa-\lambda (a^{T}a-1)
+$$
+>  \lambda es el multiplicador de Lagrange. Nuestro problema ahora será equivalente a la siguiente expresión: 
+
+$$
+Sa-\lambda a=0 \equiv Sa=\lambda a
+$$
+
+
+
+
+
+
+## Modelo Matemático del AFM.
+
+> Primer paso
+
+$$
+ X_{[k]}=U_{[k]}\Sigma _{[k]}V^{T}_{[k]} 
+$$
+
+$$
+U^{T}_{[k]}U_{[k]}=V^{T}_{[k]}V_{[k]}=I
+$$
+
+
+$$
+G_{[k]}=U_{[k]}\Sigma _{[k]}
+$$
+
+$$ diag(\Sigma _{[k]})=[\lambda _{1,k},...,\lambda _{l,k},...,\lambda _{L,k}] $$
+    
+$$ \alpha _{k}=\frac{1}{\lambda^{2} _{1,k}}=\lambda^{-2} _{1,k} $$
+      
+$$ a=[\alpha _{1}1^{T}_{[1]},...,\alpha _{k}1^{T}_{[k]},...,\alpha _{K}1^{T}_{[K]}] $$
+        
+$$ A = diag(a) $$
+          
+          
+          
+> Segundo paso
+        
+$$ X = P\Delta Q^{T} $$
+
+# Importamos los datos.
+
+
+```{r echo=FALSE}
+wine <- read.table("C:/Users/Usuario/OneDrive/Escritorio/Investigacion/data_MFA_WineJurys.csv", 
+      header=TRUE, sep=";",dec=".", row.names=1, check.names=FALSE)
+```
+
