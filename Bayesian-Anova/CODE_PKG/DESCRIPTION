@@ -1,11 +1,17 @@
 Package: AovBay
-Type: AovBay
-Title: AovBay
+Type: Package
+Title: Classic, Nonparametric and Bayesian One-Way Analysis of Variance Panel
 Version: 0.1.0
-Author: Mauricio Javier Rojas Campuzano
-Maintainer: Mauricio Javier Rojas Campuzano <maujroja@espol.edu.ec>
-Description: Package developed for the visualization and presentation of one-way analysis of variance models, with a classical, non-parametric and Bayesian approach.
-License: `use_mit_license()`, `use_gpl3_license()`
+Authors@R: c(person("Mauricio", "Rojas-Campuzano", role = c("aut", "cre","ctb"),
+                     email = "maujroja@espol.edu.ec"),
+              person("Johny", "Pambabay-Calero", role = c("aut","ctb"),
+		     email="jpambaba@espol.edu.ec"),
+              person("Sergio", "Bauz-Olvera", role = "ctb",
+                     email = "serabauz@espol.edu.ec"),
+              person("Omar", "Ruiz-Barzola", role = "ctb",
+                     email = "oruiz@espol.edu.ec"))
+Description: It covers various approaches to analysis of variance, provides an assumption testing section in order to provide a decision diagram that allows selecting the most appropriate technique. It provides the classical analysis of variance, the nonparametric equivalent of Kruskal Wallis, and the Bayesian approach. These results are shown in an interactive shiny panel, which allows modifying the arguments of the tests, contains interactive graphics and presents automatic conclusions depending on the tests in order to contribute to the interpretation of these analyzes. 'AovBay' uses 'Stan' and 'FactorBayes' for Bayesian analysis and 'Highcharts' for interactive charts.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Biarch: true
@@ -13,12 +19,28 @@ Depends:
     R (>= 3.4.0)
 Imports: 
     methods,
+    DT,
     shiny,
+    shinydashboardPlus,
+    shinydashboard,
     Rcpp (>= 0.12.0),
     RcppParallel (>= 5.0.1),
     rstan (>= 2.18.1),
     rstantools (>= 2.1.1),
-    shinydashboard
+    dplyr,
+    tibble,
+    BayesFactor,
+    broom,
+    car,
+    highcharter,
+    moments,
+    reshape,
+    nortest,
+    purrr,
+    shinycssloaders,
+    stringr,
+    waiter,
+    htmltools
 LinkingTo: 
     BH (>= 1.66.0),
     Rcpp (>= 0.12.0),
@@ -27,3 +49,4 @@ LinkingTo:
     rstan (>= 2.18.1),
     StanHeaders (>= 2.18.0)
 SystemRequirements: GNU make
+RoxygenNote: 7.1.1

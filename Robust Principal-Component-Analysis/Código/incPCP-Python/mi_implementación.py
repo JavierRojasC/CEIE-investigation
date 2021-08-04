@@ -7,7 +7,7 @@ import rank1RepSVD as rsvd
 import rank1DwnSVD as dsvd
 import checkBGChange as bgc
 import time
-
+import matplotlib.pyplot as plt
 ###
 # hog = cv2.HOGDescriptor()
 # hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
@@ -18,13 +18,15 @@ def shrink(v,lamb):
   
   return u
 
-
+    
+    
+    
 ##parámetros
 #url="http://193.242.215.2:8001/mjpg/video.mjpg"
 #url="http://50.28.225.134:83/mjpg/video.mjpg"
 url="http://64.77.205.67/mjpg/video.mjpg"
 gray=0
-innerLoops=1
+innerLoops=2
 lamb=0.025*1.25
 bgChangeFlag = 0
 backgroundThresh = 15;      #threshold de la diferencia entre el fondo actual y el anterior
@@ -32,7 +34,7 @@ backgroundStable = 15;      #numero de fotogramas para ser considerado estable
 localDist=[]
 kini= 1
 k=1
-winFrames=200
+winFrames=50
 bgChangeFlag=0
 vmaxShow = -1e10
 vminShow =  1e10
@@ -74,19 +76,20 @@ font = cv2.FONT_HERSHEY_SIMPLEX
 while(True):
     ret, curFrame= cap.read()
     
-    
+    new_frame_time = time.time()
 
     if gray:
         curFrame= cv2.cvtColor(curFrame, cv2.COLOR_BGR2GRAY)   
-    curFrame=curFrame/255.0
     #curFrame=curFrame.flatten("F").reshape(Ndata,1)
+    curFrame=cv2.resize(curFrame,None,fx=0.75,fy=0.75)
+
     curFrame=curFrame.reshape(Ndata,1)
     U,Sigma,V = isvd.rank1IncSVD(U, Sigma, V, curFrame, 1)
     
     if(k > kini):
         Lold = L
     else:
-        Lold=""
+        Lold=0
   
     
     #loop interior
@@ -96,7 +99,7 @@ while(True):
         #L = U@Sigma@V[None,:,:].T
 
         S = shrink( curFrame - L, lamb)
-        r=""
+        r=0
         if(i==0):
             pFrame =curFrame
         else:
@@ -121,19 +124,7 @@ while(True):
         vminShow = min(np.append(S, vminShow))
         S=((S-vminShow)/ ( vmaxShow  -   vminShow )).reshape(Nrows,Ncols)
         
-        new_frame_time = time.time()
-        fps = 1/(new_frame_time-prev_frame_time)
-        prev_frame_time = new_frame_time
-        fps = int(fps)
-        fps = str(fps)
-        
-        cv2.putText(S, fps, (7, 70), font, 3, (100, 255, 0), 3, cv2.LINE_AA)
-        cv2.imshow("Foreground",S)
-        
-        #curFrame=curFrame.reshape(Nrows,Ncols)
-        # cv2.putText(curFrame,fps, (7, 70), font, 3, (100, 255, 0), 3, cv2.LINE_AA)
-
-        #cv2.imshow("",curFrame)
+       
     
     else:
        
@@ -141,25 +132,19 @@ while(True):
         vmaxShow = max(np.append(S, vmaxShow))
         vminShow = min(np.append(S, vminShow))
         S=((S-vminShow)/ ( vmaxShow  -   vminShow )).reshape(Nrows,Ncols,N3d)
-        
-        new_frame_time = time.time()
-        fps = 1/(new_frame_time-prev_frame_time)
-        prev_frame_time = new_frame_time
-        fps = int(fps)
-        fps = str(fps)
-        
-        cv2.putText(S, fps, (7, 70), font, 3, (100, 255, 0), 3, cv2.LINE_AA)
 
-
-        cv2.imshow("Foreground",S)
-        # curFrame=curFrame.reshape(Nrows,Ncols,N3d)
-        
-        # cv2.putText(curFrame,fps, (7, 70), font, 3, (100, 255, 0), 3, cv2.LINE_AA)
-
-        # cv2.imshow("",curFrame)
         
 
+    fps = 1/(new_frame_time-prev_frame_time)
+    prev_frame_time = new_frame_time
+    fps = int(fps)
+    fps = str(fps)
+        
+    cv2.putText(S, fps, (7, 70), font, 3, (100, 255, 0), 3, cv2.LINE_AA)
+    cv2.imshow("Foreground",S)
+    curFrame=curFrame.reshape(Nrows,Ncols,N3d)
 
+    cv2.imshow("",curFrame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
