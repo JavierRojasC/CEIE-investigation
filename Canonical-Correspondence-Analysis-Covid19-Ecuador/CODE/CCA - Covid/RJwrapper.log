@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.6.18)  18 JUN 2021 06:01
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.6.29)  1 JUL 2021 00:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **RJwrapper.tex
 (./RJwrapper.tex
 LaTeX2e <2021-06-01> patch level 1
-L3 programming layer <2021-06-01> (c:/Users/Usuario/AppData/Roaming/TinyTeX/tex
+L3 programming layer <2021-06-18> (c:/Users/Usuario/AppData/Roaming/TinyTeX/tex
 mf-dist/tex/latex/base/report.cls
 Document Class: report 2021/02/12 v1.4n Standard LaTeX document class
 (c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
@@ -970,43 +970,39 @@ Package caption Info: End \AtBeginDocument code.
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
 (hyperref)                than one, level fixed on input line 13.
 
-
-Package natbib Warning: Citation `ZHANG2020' on page 1 undefined on input line 
-24.
-
 [1{c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/p
 dftex.map}
 
 ]
 LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 1
-44.
+63.
 
 (c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
 LaTeX Font Info:    Trying to load font information for OML+zplm on input line 
-144.
+163.
 
 (c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.f
 d
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 
-144.
+163.
 
 (c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.f
 d
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 
-144.
+163.
 
 (c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.f
 d
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 
-144.
+163.
 
 (c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.f
 d
@@ -1017,51 +1013,95 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 144.
+(Font)              scaled to size 9.37807pt on input line 163.
 
 (c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa
 .cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 144.
+(Font)              scaled to size 7.29405pt on input line 163.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 144.
+(Font)              scaled to size 5.21004pt on input line 163.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 144.
+(Font)              scaled to size 9.37807pt on input line 163.
 
 (c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb
 .cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 144.
+(Font)              scaled to size 7.29405pt on input line 163.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 144.
+(Font)              scaled to size 5.21004pt on input line 163.
+[2]
 
-LaTeX Warning: Command \' invalid in math mode on input line 161.
-
-Missing character: There is no ó in font pplr7t!
-
-LaTeX Warning: Command \' invalid in math mode on input line 163.
+LaTeX Warning: Command \' invalid in math mode on input line 180.
 
 Missing character: There is no ó in font pplr7t!
-[2] (./RJwrapper.bbl (./RJwrapper.brf)
+
+LaTeX Warning: Command \' invalid in math mode on input line 182.
+
+Missing character: There is no ó in font pplr7t!
+(./RJwrapper.bbl (./RJwrapper.brf)
 \tf@brf=\write6
 \openout6 = `RJwrapper.brf'.
 
-! Misplaced alignment tab character &.
-<argument> Chaos, Solitons &
-                             Fractals
-l.17 
-      
-Here is how much of TeX's memory you used:
- 24924 strings out of 480472
- 451555 string characters out of 5897137
- 771177 words of memory out of 5000000
- 41985 multiletter control sequences out of 15000+600000
- 438361 words of font info for 179 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 117i,11n,131p,501b,481s stack positions out of 5000i,500n,10000p,200000b,80000s
+LaTeX Font Info:    Trying to load font information for T1+zi4 on input line 19
+.
 
-!  ==> Fatal error occurred, no output PDF file produced!
+(c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi
+4.fd
+File: t1zi4.fd 2018/01/14 T1/zi4 (Inconsolata)
+)
+LaTeX Font Info:    Font shape `T1/zi4/m/n' will be
+(Font)              scaled to size 9.18004pt on input line 19.
+Package microtype Info: Loading generic protrusion settings for font family
+(microtype)             `zi4' (encoding: T1).
+(microtype)             For optimal results, create family-specific settings.
+(microtype)             See the microtype manual for details.
+[3])
+
+LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
+(Font)              using `T1/zi4/m/n' instead on input line 252.
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 252--27
+
+ []
+
+[4] (./RJwrapper.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package rerunfilecheck Info: File `RJwrapper.out' has not changed.
+(rerunfilecheck)             Checksum: 36F9BE443D1489418CD5DF06370C948D;863.
+Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
+(rerunfilecheck)             Checksum: 65007BBC4A7A8FAEDE3B5F5CE640B0DD;654.
+ ) 
+Here is how much of TeX's memory you used:
+ 25090 strings out of 480479
+ 454138 string characters out of 5897463
+ 772940 words of memory out of 5000000
+ 42078 multiletter control sequences out of 15000+600000
+ 441276 words of font info for 207 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 117i,12n,131p,514b,606s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/inconsol
+ata/i4-t1-0.enc}{c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/
+dvips/base/8r.enc}<c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/fonts/ty
+pe1/public/inconsolata/Inconsolata-zi4r.pfb><c:/Users/Usuario/AppData/Roaming/T
+inyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/Users/Usuario/Ap
+pData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/
+Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fp
+lmri.pfb><c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/p
+alatino/uplb8a.pfb><c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-dist/fonts/t
+ype1/urw/palatino/uplr8a.pfb><c:/Users/Usuario/AppData/Roaming/TinyTeX/texmf-di
+st/fonts/type1/urw/palatino/uplri8a.pfb>
+Output written on RJwrapper.pdf (4 pages, 115345 bytes).
+PDF statistics:
+ 156 PDF objects out of 1000 (max. 8388607)
+ 134 compressed objects within 2 object streams
+ 31 named destinations out of 1000 (max. 500000)
+ 53293 words of extra memory for PDF output out of 61914 (max. 10000000)
+
