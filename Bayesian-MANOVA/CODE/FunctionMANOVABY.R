@@ -72,8 +72,8 @@ manovabay <- function(dataset=FALSE) {
         sidebarMenu(
           menuItem("Base de Datos", tabName = "BD", startExpanded = TRUE,icon = icon("database")),
           menuItem("Supuestos", tabName = "Supuestos", startExpanded = TRUE,icon = icon("tasks")),
-          menuItem("MANOVA Clasico", tabName = "MANOVAcl", startExpanded = TRUE,icon = icon("adn")),
-          menuItem("PERMANOVA", tabName = "PERMANOVA", startExpanded = TRUE,icon = icon("kickstarter-k")),
+          menuItem("MANOVA Clasico", tabName = "MANOVAcl", startExpanded = TRUE,icon = icon("medium-m")),
+          menuItem("PERMANOVA", tabName = "PERMANOVA", startExpanded = TRUE,icon = icon("product-hunt")),
           menuItem("MANOVA Bayesiano", tabName = "MANOVAby", startExpanded = TRUE,icon = icon("bold"))
           
           
@@ -216,6 +216,7 @@ manovabay <- function(dataset=FALSE) {
                                            max=1),
                                
                                box(title = "Tabla MANOVA Clasico",collapsible = TRUE,
+                                   width=12,
                                    tableOutput('MAov'),
                                    h2("Conclusion"),
                                    h3(textOutput('conclusionMAov')),
@@ -233,20 +234,25 @@ manovabay <- function(dataset=FALSE) {
                                           withSpinner(highchartOutput('MAovPostHocGraph',  height = "450px"), type = 7, color='#C7D5EB')))
                        ),
                        tabItem(tabName = "PERMANOVA",
-                               sliderInput(inputId = 'Permutaciones',
-                                           label='Ingrese numero de permutaciones',
+                               sliderInput(inputId = 'alpha3',
+                                           label='Ingrese alpha (Error tipo 1)',
                                            value=0.05,
-                                           min=1,
-                                           max=1000),
+                                           min=0,
+                                           max=1),
+                               textInput("text", "Numero de permutaciones:"),
                                
-                               box(title = "Tabla PERMANOVA",collapsible = TRUE,
+                               box(title = "Tabla PERMANOVA",status = "primary", solidHeader = TRUE,
+                                   collapsible = TRUE,
                                    tableOutput('PERMaov'),
                                    h2("Conclusion"),
                                    h3(textOutput('conclusionPERMaov'))),
                                
-                               box(title = 'Permutest ',collapsible = TRUE,
+                               box(title = 'Permutest ',status = "primary", solidHeader = TRUE,
+                                   collapsible = TRUE,
                                    tableOutput('PerPostHoc'),
-                                   h3('Conclusion')
+                                   h2("Conclusion"),
+                                   h3(textOutput('conclusionPerPostHoc'))
+                                  
                                    
                                )
                                
@@ -372,6 +378,7 @@ manovabay <- function(dataset=FALSE) {
         
         
         SA <- (manova(as.matrix(Data[,Dep])~as.factor(as.matrix(Data[,Ind]))))
+        
         Graph <- qqnorm(SA$residuals, pch = 1, frame = FALSE)
         DataLine <- data.frame(xd=Graph[[1]],yd=Graph['y'])
         colnames(DataLine) <- c('xd','yd')
@@ -410,6 +417,7 @@ manovabay <- function(dataset=FALSE) {
           hc_title(text='QQ plot')
       })
       
+      
       output$MAovPostHoc <- renderTable({
         Data <- data()
         Data <- na.omit(Data)
@@ -418,7 +426,7 @@ manovabay <- function(dataset=FALSE) {
         Factor <- as.factor(as.matrix(Data[,Ind]))
         Depend <- as.matrix(Data[,Dep])
         
-        SA <- summary(manova(Depend~Factor))
+        SA <- summary(manova(Depend~Factor,test=input$padjust))
         SA$stats
         
         
@@ -433,10 +441,10 @@ manovabay <- function(dataset=FALSE) {
         Factor <- as.factor(as.matrix(Data[,Ind]))
         Depend <- as.matrix(Data[,Dep])
         
-        SA <- (manova(Depend~Factor))
+        SA <- (manova(Depend~Factor,test=input$padjust))
         
         hcboxplot(x = Depend, var = Factor,
-                  name = "Length", color = "#2980b9") %>%
+                  name = "Length", outliers = TRUE) %>%
           hc_add_theme(hc_theme_economist())
         
         #S <- as.data.frame(SA[[4]])
@@ -498,8 +506,10 @@ manovabay <- function(dataset=FALSE) {
         Data <- na.omit(Data)
         Dep <- input$y
         Ind <- input$x
-        
+      
         SA <- (manova(as.matrix(Data[,Dep])~as.factor(as.matrix(Data[,Ind]))))
+        SA
+        
         if (length(SA$residuals)>30){
           
           response=paste0('Normalidad por Test de Mardia')
@@ -511,6 +521,18 @@ manovabay <- function(dataset=FALSE) {
           
           response
         }
+      })
+      
+      output$normalidadmardia <-renderTable({
+        Data <- data()
+        Data <- na.omit(Data)
+        Dep <- input$y
+        Ind <- input$x
+        
+        SA <- (manova(as.matrix(Data[,Dep])~as.factor(as.matrix(Data[,Ind]))))
+        
+        Test <- mvn(Data[,Dep],mvnTest='mardia')
+        Test$multivariateNormality
       })
       
       output$CumpleNorm <- renderText({
@@ -654,7 +676,7 @@ manovabay <- function(dataset=FALSE) {
         
         DistanciasY<-dist(Depend)
         Permanova1 <-adonis2(DistanciasY ~ Factor, 
-                             data=Data, permutations = 999)
+                             data=Data, permutations = as.numeric(input$text))
         Permanova1
         
         #  dataBY <- data.frame(Ind2=Factor, Dep2=Depend)
@@ -685,67 +707,78 @@ manovabay <- function(dataset=FALSE) {
         
         DistanciasY<-dist(Depend)
         Permanova1 <-adonis2(DistanciasY ~ Factor, 
-                             data=Data, permutations = 999)
+                             data=Data, permutations = as.numeric(input$text))
         
-        if (Permanova1$`Pr(>F)`[1]>= input$alpha){
+        if (Permanova1$`Pr(>F)`[1]>= input$alpha3){
           response=paste0('Segun el Permutation test, el conjunto de Variables 
-                          dependientes no tiene efecto significativo en',Ind)
+                          dependientes no tiene efecto significativo en ',Ind)
         } else {
           response=paste0('Segun el Permutation test, el conjunto de Variables 
-          dependientes si tiene efecto significativo en',Ind)
+          dependientes si tiene efecto significativo en ',Ind)
         }
         response
       })
       
       
-     #output$independenciaDurbin <- renderTable({
-     #  Data <- data()
-     #  Data <- na.omit(Data)
-     #  Dep <- input$y
-     #  Ind <- input$x
-     #  
-     #  
-     #  Factor <- as.factor(as.matrix(Data[,Ind]))
-     #  Depend <- as.matrix(Data[,Dep])
-     #  
-     #  dataBY <- data.frame(Ind2=Factor, Dep2=Depend)
-     #  colnames(dataBY) <- c('Ind2','Dep2')
-     #  
-     #  Aov <- aov(Dep2 ~ Ind2, data=dataBY)
-     #  DW <- durbinWatsonTest(Aov)
-     #  Tabla <- data.frame(Autocor=DW[1],
-     #                      Dw=signif(as.numeric(DW[2]),4),
-     #                      ValP=signif(as.numeric(DW[3]),4))
-     #  colnames(Tabla) <- c('Autocorrelación','D-W Statistic',
-     #                       'p-value')
-     #  Tabla
-     #})
-     #
-     #
-     #output$independenciaConclu <- renderText({
-     #  Data <- data()
-     #  Data <- na.omit(Data)
-     #  Dep <- input$y
-     #  Ind <- input$x
-     #  prio <- input$prior
-     #  
-     #  Factor <- as.factor(as.matrix(Data[,Ind]))
-     #  Depend <- as.numeric(as.matrix(Data[,Dep]))
-     #  
-     #  dataBY <- data.frame(Ind2=Factor, Dep2=Depend)
-     #  colnames(dataBY) <- c('Ind2','Dep2')
-     #  
-     #  Aov <- aov(Dep2 ~ Ind2, data=dataBY)
-     #  DW <- durbinWatsonTest(Aov)
-     #  
-     #  if (DW[3] >= input$alpha){
-     #    response=paste0('Según el test de Durbin Watson, no existe presencia de autocorrelación en los residuos.')
-     #  } else {
-     #    response=paste0('Según el test de Durbin Watson, existe presencia de autocorrelación en los residuos.')
-     #  }
-     #  response
-     #})
-     #
+      
+      
+      
+      output$PerPostHoc <- renderTable({
+        Data <- data()
+        Data <- na.omit(Data)
+        Dep <- input$y
+        Ind <- input$x
+        prio <- input$prior
+        
+        Factor <- as.factor(as.matrix(Data[,Ind]))
+        Depend <- as.matrix(Data[,Dep])
+        
+        DistanciasY<-dist(Depend)
+        dispersionS<- betadisper(DistanciasY,group = Factor)
+        P<-permutest(dispersionS)
+        P$tab
+        
+        #dataBY <- data.frame(Ind2=Factor, Dep2=Depend)
+        #colnames(dataBY) <- c('Ind2','Dep2')
+        #
+        #Aov <- aov(Dep2 ~ Ind2, data=dataBY)
+        #DW <- durbinWatsonTest(Aov)
+        #Tabla <- data.frame(Autocor=DW[1],
+        #                    Dw=signif(as.numeric(DW[2]),4),
+        #                    ValP=signif(as.numeric(DW[3]),4))
+        #colnames(Tabla) <- c('Autocorrelación','D-W Statistic',
+        #                     'p-value')
+        #Tabla
+      })
+      
+      
+      output$conclusionPerPostHoc <- renderText({
+        Data <- data()
+        Data <- na.omit(Data)
+        Dep <- input$y
+        Ind <- input$x
+        
+        Factor <- as.factor(as.matrix(Data[,Ind]))
+        Depend <- as.matrix(Data[,Dep])
+        
+        DistanciasY<-dist(Depend)
+        dispersionS<- betadisper(DistanciasY,group = Factor )
+        P<-permutest(dispersionS)
+        
+        
+        if (P$tab$`Pr(>F)`[1] < input$alpha){
+          response=paste0('Segun Permutation test for homogeneity of
+                          multivariate dispersions, la Homogenidad del conjunto 
+                          de variables dependientes es significativa')
+        } else {
+          response=paste0('Segun Permutation test for homogeneity of
+                          multivariate dispersions, la Homogenidad del conjunto 
+                          de variables dependientes no es significativa')
+          
+        }
+        response
+      })
+     
      #
      #output$CumpleIndependencia <- renderText({
      #  Data <- data()
@@ -787,7 +820,7 @@ manovabay <- function(dataset=FALSE) {
         P<-permutest(dispersionS)
       
         hcboxplot(x = dispersionS$distances, var = dispersionS$group,
-                  name = "Length", color = "#2980b9") %>%
+                  name = "Length",outliers = TRUE) %>%
           hc_add_theme(hc_theme_economist())
       })
       
@@ -877,7 +910,7 @@ manovabay <- function(dataset=FALSE) {
         
         
         hcboxplot(x = Depend, var = Factor,
-                  name = "Length", color = "#2980b9") %>%
+                  name = "Length", outliers = TRUE) %>%
           hc_add_theme(hc_theme_economist())
         
         #hcboxplot(x=(as.matrix(Data[,Dep])), var=as.factor(as.matrix(Data[,Ind])), name = "Diagrama de cajas", color = "#0E1142", outliers = FALSE,
@@ -1169,7 +1202,7 @@ manovabay <- function(dataset=FALSE) {
         
         MBox <- boxM(Depend ~ Factor, data=Data)
         
-        if(MBox$p.value >=  0.05 ){
+        if(MBox$p.value >=  input$alpha ){
           col_homocedasticidad= "#77DA85" 
           col_homocedasticidad_si= "#77DA85"     
           col_homocedasticidad_no= "#D5D5D5"       
@@ -1184,7 +1217,7 @@ manovabay <- function(dataset=FALSE) {
         dispersionS<- betadisper(DistanciasY,group = Factor)
         P<-permutest(dispersionS)
         
-        if(P$tab$`Pr(>F)`[1] < 0.05 ){
+        if(P$tab$`Pr(>F)`[1] < input$alpha ){
           col_homogeneidad= "#77DA85" 
           col_homogeneidad_si= "#77DA85"     
           col_homogeneidad_no= "#D5D5D5"       
@@ -1233,16 +1266,18 @@ manovabay <- function(dataset=FALSE) {
                           list(from = '�Cumple supuesto de normalidad?', to = 'No cumple normalidad'),
                           list(from = 'No cumple normalidad', to = '�Cumple supuesto de homogeneidad?'),
                           list(from = '�Cumple supuesto de homocedasticidad?', to = 'Si, cumple homocedasticidad'),
-                          list(from = 'Si, cumple homocedasticidad', to = '�Cumple supuesto de homogeneidad?'),
-                          list(from = '�Cumple supuesto de homogeneidad?', to = 'Si, cumple homogeneidad'),
-                          list(from = '�Cumple supuesto de homogeneidad?', to = 'No cumple homogeneidad'),
-                          
+                          list(from = 'Si, cumple homocedasticidad', to = '�Cumple supuesto de homocedasticidad?'),
                           list(from = '�Cumple supuesto de homocedasticidad?', to = 'No cumple homocedasticidad'),
+                          list(from = 'No cumple homocedasticidad', to = '�Cumple supuesto de homogeneidad?'),
+                          list(from = '�Cumple supuesto de homogeneidad?', to = 'Si, cumple homogeneidad'),
+                          list(from = 'Si, cumple homogeneidad', to = '�Cumple supuesto de homogeneidad?'),
+                          
+                          list(from = '�Cumple supuesto de homogeneidad?', to = 'No cumple homogeneidad')
                           #list(from = '¿Cumple supuesto de simetría?', to = 'Sí, cumple simetría'),
                           #list(from = '¿Cumple supuesto de simetría?', to = 'No cumple simetría'),
                           #  list(from = 'Sí, cumple homocedasticidad', to = 'ANOVA Clásico'),
                           #list(from = 'No cumple normalidad', to = '¿Cumple supuesto de simetría?'),
-                          list(from = 'No cumple homocedasticidad', to = '�Cumple supuesto de homogeneidad?')
+                          #list(from = 'No cumple homocedasticidad', to = '�Cumple supuesto de homogeneidad?')
                           #list(from = 'Sí, cumple simetría', to = 'Kruskal Wallis'),
                           #list(from = 'No cumple simetría', to = 'ANOVA Bayesiano'),
                           # list(from = 'Comparación de medias por grupo', to = 'ANOVA Bayesiano')
