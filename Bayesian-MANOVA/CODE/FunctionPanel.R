@@ -62,7 +62,7 @@ manovabay <- function(dataset=FALSE) {
   
   app <- list(
     ui = dashboardPage(
-      preloader = list(html = tagList(spin_three_bounce(), h3("cargando ...")), color = "#5dd0da"),
+     # preloader = list(html = tagList(spin_three_bounce(), h3("cargando ...")), color = "#5dd0da"),
       
       title =  '' ,
       dashboardHeader(title = "Analisis de Varianza Multivariante",
@@ -74,7 +74,6 @@ manovabay <- function(dataset=FALSE) {
           menuItem("MANOVA Clasico", tabName = "MANOVAcl", startExpanded = TRUE,icon = icon("adn")),
           menuItem("PERMANOVA", tabName = "PERMANOVA", startExpanded = TRUE,icon = icon("kickstarter-k")),
           menuItem("MANOVA Bayesiano", tabName = "MANOVAby", startExpanded = TRUE,icon = icon("bold"))
-          
           
           
         )),
@@ -161,7 +160,7 @@ manovabay <- function(dataset=FALSE) {
                                fluidRow(width=12,
                                         box(title="Vista de la base de datos",
                                             
-                                            dataTableOutput("DTable")))
+                                            DT::dataTableOutput("DTable")))
                                
                        ),
                        tabItem(tabName = "Supuestos",
@@ -190,11 +189,11 @@ manovabay <- function(dataset=FALSE) {
                                           tableOutput('homocedasticidadBox'),
                                           h3(textOutput('homocedasticidadConclu')),
                                           h2(htmlOutput('CumpleHomoc')))),
-                               box(title = 'Homogeneidad de dispersión entre grupos',collapsible = TRUE,
+                               box(title = 'Homogeneidad de dispersi?n entre grupos',collapsible = TRUE,
                                    width = 12,
                                    
                                    column(12,
-                                          h2('Homogeneidad de dispersión permutest'),
+                                          h2('Homogeneidad de dispersiÃ³n permutest'),
                                           tableOutput('homogenidadPerutest'),
                                           h3(textOutput('homogeneidadConclu')),
                                           h2(htmlOutput('Cumplehomog')))),
@@ -275,7 +274,7 @@ manovabay <- function(dataset=FALSE) {
                                )
                      ))),
     dashboardFooter(
-      left = left_footer,
+      left = NULL,
       right = NULL),
     
     server = function(input, output) {
@@ -303,10 +302,17 @@ manovabay <- function(dataset=FALSE) {
         
       })
       
-      output$DTable <- renderDataTable({
+      output$DTable <- DT::renderDataTable({
         Data <- data()
         
+        datatable(Data, extensions = 'FixedColumns',
+                  options = list(
+                    dom = 't',
+                    scrollX = TRUE,
+                    fixedColumns = TRUE
+                  ))
       })
+      
       
       output$var <- renderUI({
         
@@ -1109,18 +1115,18 @@ manovabay <- function(dataset=FALSE) {
           hc_chart(type = 'organization', inverted = TRUE) %>%
           hc_add_series(name='Diagrama de tecnicas segun cumplimiento de supuestos',
                         data = list(
-                          list(from = 'Comparacion de medias por grupo', to = '¿Cumple supuesto de normalidad?'),
-                          list(from = '¿Cumple supuesto de normalidad?', to = 'si, cumple normalidad'),
-                          list(from = 'Si, cumple normalidad', to = '¿Cumple supuesto de homocedasticidad?'),
-                          list(from = '¿Cumple supuesto de normalidad?', to = 'No cumple normalidad'),
-                          list(from = '¿Cumple supuesto de homocedasticidad?', to = 'Si, cumple homocedasticidad'),
-                          list(from = 'Si, cumple homocedasticidad', to = '¿Cumple supuesto de independencia?'),
-                          list(from = '¿Cumple supuesto de independencia?', to = 'Si, cumple independencia'),
-                          list(from = '¿Cumple supuesto de independencia?', to = 'No cumple independencia'),
+                          list(from = 'Comparacion de medias por grupo', to = '?Cumple supuesto de normalidad?'),
+                          list(from = '?Cumple supuesto de normalidad?', to = 'si, cumple normalidad'),
+                          list(from = 'Si, cumple normalidad', to = '?Cumple supuesto de homocedasticidad?'),
+                          list(from = '?Cumple supuesto de normalidad?', to = 'No cumple normalidad'),
+                          list(from = '?Cumple supuesto de homocedasticidad?', to = 'Si, cumple homocedasticidad'),
+                          list(from = 'Si, cumple homocedasticidad', to = '?Cumple supuesto de independencia?'),
+                          list(from = '?Cumple supuesto de independencia?', to = 'Si, cumple independencia'),
+                          list(from = '?Cumple supuesto de independencia?', to = 'No cumple independencia'),
                           
-                          list(from = '¿Cumple supuesto de homocedasticidad?', to = 'No cumple homocedasticidad'),
-                          list(from = '¿Cumple supuesto de simetria?', to = 'Si, cumple simetria'),
-                          list(from = '¿Cumple supuesto de simetria?', to = 'No cumple simetria'),
+                          list(from = '?Cumple supuesto de homocedasticidad?', to = 'No cumple homocedasticidad'),
+                          list(from = '?Cumple supuesto de simetria?', to = 'Si, cumple simetria'),
+                          list(from = '?Cumple supuesto de simetria?', to = 'No cumple simetria'),
                           #  list(from = 'Si, cumple homocedasticidad', to = 'ANOVA Clasico'),
                           #list(from = 'No cumple normalidad', to = 'Â¿Cumple supuesto de simetrÃ­a?'),
                           list(from = 'No cumple homocedasticidad', to = 'Â¿Cumple supuesto de simetrÃ­a?')
@@ -1136,16 +1142,16 @@ manovabay <- function(dataset=FALSE) {
                         ),
                         nodes=  list(
                           list(id = 'ComparaciOn de medias por grupo', color="#77D0DA"),
-                          list(id = '¿Cumple supuesto de normalidad?', color=col_normalidad),
+                          list(id = '?Cumple supuesto de normalidad?', color=col_normalidad),
                           list(id = 'SI, cumple normalidad', color=col_normalidad_si),
                           list(id = 'No cumple normalidad', color=col_normalidad_no),
-                          list(id = '¿Cumple supuesto de homocedasticidad?', color=col_homocedasticidad),
+                          list(id = '?Cumple supuesto de homocedasticidad?', color=col_homocedasticidad),
                           list(id = 'SI, cumple homocedasticidad', color=col_homocedasticidad_si),
                           list(id = 'No cumple homocedasticidad', color=col_homocedasticidad_no),
-                          list(id = '¿Cumple supuesto de simetria?', color=col_simetria),
+                          list(id = '?Cumple supuesto de simetria?', color=col_simetria),
                           list(id = 'SI, cumple simetria', color=col_simetria_si),
                           list(id = 'No cumple simetria', color=col_simetria_no),
-                          list(id = '¿Cumple supuesto de independencia?', color=col_independencia),
+                          list(id = '?Cumple supuesto de independencia?', color=col_independencia),
                           list(id = 'SI, cumple independencia', color=col_independencia_si),
                           list(id = 'No cumple independencia', color=col_independencia_no),
                           list(id = 'MANOVA Clasico', color=col_anova),
